@@ -1,0 +1,23 @@
+{
+  "correct_answer": {
+    "analog": "quan",
+    "button_color": "purple"
+  },
+  "metadata": {
+    "correct_slot_index": 2,
+    "feature_distractor_slot": 1,
+    "feature_match_answer": {
+      "analog": "lurn",
+      "button_color": "purple"
+    },
+    "n_objects": 3,
+    "positional_match_answer": {
+      "analog": "vro",
+      "button_color": "blue"
+    },
+    "seed": 1004
+  },
+  "problem_id": "baseline_03",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a skiv has a property: it can be activated by pressing one of its buttons. Your job is to figure out which object in the perception scenario is the skiv-analog, and therefore which button on it can be activated.\n\nMemory scenario: There are three objects on a table: a skiv, a tarn, and a xav. The skiv is underneath the tarn. The tarn is to-the-left-of the xav. The skiv has a purple button on top, a red button on side, and a blue button on bottom. The tarn has a red button on top and a purple button on bottom. The xav has a blue button on top and a purple button on side. Pressing the purple button on the skiv activates it.\n\nPerception scenario: There are three objects on a shelf: a vro, a lurn, and a quan. The quan is underneath the lurn. The lurn is to-the-left-of the vro. The vro has a blue button on top and a red button on bottom. The lurn has a red button on top and a purple button on side. The quan has a purple button on top, a red button on side, and a blue button on bottom.\n\nWhich object in the perception scenario is the skiv-analog, and which button activates it?",
+  "variant": "baseline"
+}

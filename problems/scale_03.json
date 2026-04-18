@@ -1,0 +1,48 @@
+{
+  "correct_answer": {
+    "analog": "tunk",
+    "button_color": "blue"
+  },
+  "metadata": {
+    "feature_match_answer": {
+      "analog": "greeble",
+      "button_color": "blue"
+    },
+    "memory_words": [
+      "clop",
+      "wren",
+      "thorp",
+      "vro",
+      "mek",
+      "dask",
+      "xav"
+    ],
+    "n_objects": 7,
+    "perception_list_order": [
+      "woz",
+      "nurp",
+      "greeble",
+      "quib",
+      "wix",
+      "tunk",
+      "brall"
+    ],
+    "perception_words": [
+      "tunk",
+      "greeble",
+      "woz",
+      "quib",
+      "wix",
+      "nurp",
+      "brall"
+    ],
+    "positional_match_answer": {
+      "analog": "woz",
+      "button_color": "yellow"
+    },
+    "seed": 3004
+  },
+  "problem_id": "scale_03",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a clop has a property: it can be activated by pressing one of its buttons. Your job is to figure out which object in the perception scenario is the clop-analog, and therefore which button on it can be activated.\n\nMemory scenario: There are 7 objects on a table: a clop, a wren, a thorp, a vro, a mek, a dask, and a xav. The clop is underneath the wren. The wren is to-the-left-of the thorp. The thorp is above the vro. The vro is to-the-right-of the mek. The mek is underneath the dask. The dask is to-the-left-of the xav. The clop has a blue button on top, a red button on side, and a yellow button on bottom. The wren has a yellow button on top and a blue button on bottom. The thorp has a yellow button on top and a blue button on bottom. The vro has a yellow button on top and a blue button on bottom. The mek has a yellow button on top and a blue button on front. The dask has a yellow button on top and a blue button on bottom. The xav has a yellow button on top and a blue button on side. Pressing the blue button on the clop activates it.\n\nPerception scenario: There are 7 objects on a shelf: a woz, a nurp, a greeble, a quib, a wix, a tunk, and a brall. The tunk is underneath the greeble. The greeble is to-the-left-of the woz. The woz is above the quib. The quib is to-the-right-of the wix. The wix is underneath the nurp. The nurp is to-the-left-of the brall. The woz has a yellow button on top and a yellow button on bottom. The nurp has a red button on top and a yellow button on bottom. The greeble has a red button on top, a blue button on side, and a yellow button on bottom. The quib has a red button on top and a red button on bottom. The wix has a yellow button on top and a red button on bottom. The tunk has a blue button on top, a red button on side, and a yellow button on bottom. The brall has a yellow button on top and a red button on bottom.\n\nWhich object in the perception scenario is the clop-analog, and which button activates it?",
+  "variant": "scale"
+}

@@ -1,0 +1,39 @@
+{
+  "correct_answer": {
+    "analog": "jorp",
+    "button_color": "yellow"
+  },
+  "metadata": {
+    "feature_match_answer": {
+      "analog": "florp",
+      "button_color": "yellow"
+    },
+    "memory_words": [
+      "snig",
+      "yib",
+      "rast",
+      "emp"
+    ],
+    "n_objects": 4,
+    "perception_list_order": [
+      "jax",
+      "zop",
+      "jorp",
+      "florp"
+    ],
+    "perception_words": [
+      "jorp",
+      "florp",
+      "zop",
+      "jax"
+    ],
+    "positional_match_answer": {
+      "analog": "jax",
+      "button_color": "green"
+    },
+    "seed": 3002
+  },
+  "problem_id": "scale_00",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a snig has a property: it can be activated by pressing one of its buttons. Your job is to figure out which object in the perception scenario is the snig-analog, and therefore which button on it can be activated.\n\nMemory scenario: There are 4 objects on a table: a snig, a yib, a rast, and a emp. The snig is underneath the yib. The yib is to-the-left-of the rast. The rast is above the emp. The snig has a yellow button on top, a purple button on side, and a green button on bottom. The yib has a purple button on top and a yellow button on bottom. The rast has a purple button on top and a yellow button on front. The emp has a purple button on top and a yellow button on front. Pressing the yellow button on the snig activates it.\n\nPerception scenario: There are 4 objects on a shelf: a jax, a zop, a jorp, and a florp. The jorp is underneath the florp. The florp is to-the-left-of the zop. The zop is above the jax. The jax has a green button on top and a green button on bottom. The zop has a green button on top and a purple button on bottom. The jorp has a yellow button on top, a purple button on side, and a green button on bottom. The florp has a purple button on top, a yellow button on side, and a green button on bottom.\n\nWhich object in the perception scenario is the snig-analog, and which button activates it?",
+  "variant": "scale"
+}

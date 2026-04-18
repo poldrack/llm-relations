@@ -1,0 +1,24 @@
+{
+  "correct_answer": {
+    "analog": "trob",
+    "button_color": "yellow"
+  },
+  "metadata": {
+    "correct_slot_index": 2,
+    "domain": "org_chart",
+    "feature_distractor_slot": 0,
+    "feature_match_answer": {
+      "analog": "snig",
+      "button_color": "yellow"
+    },
+    "n_objects": 3,
+    "positional_match_answer": {
+      "analog": "snig",
+      "button_color": "purple"
+    },
+    "seed": 4001
+  },
+  "problem_id": "cross_domain_00",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel employee called a skiv has a property: it can be activated by one of its color-coded specialtys. Your job is to figure out which employee in the perception scenario is the skiv-analog, and therefore which color-coded specialty on it can be activated.\n\nMemory scenario: There are three employees in an organization: a skiv, a tunk, and a drog. The skiv reports-to the tunk. The tunk sits-beside the drog. The skiv has a yellow color-coded specialty on top, a purple color-coded specialty on side, and a green color-coded specialty on bottom. The tunk has a purple color-coded specialty on top and a yellow color-coded specialty on bottom. The drog has a green color-coded specialty on top and a yellow color-coded specialty on side. Assigning the yellow specialty to the skiv activates it.\n\nPerception scenario: There are three employees in an organization: a snig, a clop, and a trob. The trob reports-to the snig. The snig sits-beside the clop. The snig has a purple color-coded specialty on top and a yellow color-coded specialty on side. The clop has a green color-coded specialty on top and a purple color-coded specialty on bottom. The trob has a yellow color-coded specialty on top, a purple color-coded specialty on side, and a green color-coded specialty on bottom.\n\nWhich employee in the perception scenario is the skiv-analog, and which color-coded specialty activates it?",
+  "variant": "cross_domain"
+}

@@ -1,0 +1,24 @@
+{
+  "correct_answer": {
+    "analog": "glim",
+    "button_color": "blue"
+  },
+  "metadata": {
+    "correct_slot_index": 2,
+    "domain": "building",
+    "feature_distractor_slot": 1,
+    "feature_match_answer": {
+      "analog": "drog",
+      "button_color": "blue"
+    },
+    "n_objects": 3,
+    "positional_match_answer": {
+      "analog": "zop",
+      "button_color": "red"
+    },
+    "seed": 4003
+  },
+  "problem_id": "cross_domain_02",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel room called a ulmp has a property: it can be activated by one of its colored fixtures. Your job is to figure out which room in the perception scenario is the ulmp-analog, and therefore which colored fixture on it can be activated.\n\nMemory scenario: There are three rooms in a building: a ulmp, a rask, and a dask. The ulmp is-directly-below the rask. The rask is-adjacent-to the dask. The ulmp has a blue colored fixture on top, a green colored fixture on side, and a red colored fixture on bottom. The rask has a green colored fixture on top and a blue colored fixture on bottom. The dask has a red colored fixture on top and a blue colored fixture on side. Operating the blue fixture in the ulmp activates it.\n\nPerception scenario: There are three rooms in a building: a zop, a drog, and a glim. The glim is-directly-below the drog. The drog is-adjacent-to the zop. The zop has a red colored fixture on top and a green colored fixture on bottom. The drog has a green colored fixture on top and a blue colored fixture on side. The glim has a blue colored fixture on top, a green colored fixture on side, and a red colored fixture on bottom.\n\nWhich room in the perception scenario is the ulmp-analog, and which colored fixture activates it?",
+  "variant": "cross_domain"
+}

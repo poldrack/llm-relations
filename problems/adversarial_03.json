@@ -1,0 +1,24 @@
+{
+  "correct_answer": {
+    "analog": "klon",
+    "button_color": "red"
+  },
+  "metadata": {
+    "correct_slot_index": 2,
+    "decoy_index": 3,
+    "feature_distractor_slot": 0,
+    "feature_match_answer": {
+      "analog": "prit",
+      "button_color": "red"
+    },
+    "n_objects": 3,
+    "positional_match_answer": {
+      "analog": "prit",
+      "button_color": "red"
+    },
+    "seed": 5004
+  },
+  "problem_id": "adversarial_03",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a zink has a property: it can be activated by pressing one of its buttons. Your job is to figure out which object in the perception scenario is the zink-analog, and therefore which button on it can be activated.\n\nMemory scenario: There are three objects on a table: a zink, a ikk, and a twix. The zink is underneath the ikk. The ikk is to-the-left-of the twix. The zink has a red button on top, a yellow button on side, and a purple button on bottom. The ikk has a yellow button on top and a red button on bottom. The twix has a purple button on top and a red button on side. Pressing the red button on the zink activates it.\n\nPerception scenario: There are three objects on a shelf: a prit, a oxim, and a klon. The klon is underneath the prit. The prit is to-the-left-of the oxim. The prit has a red button on top, a red button on side, and a yellow button on bottom. The oxim has a purple button on top and a yellow button on bottom. The klon has a red button on top, a yellow button on side, and a purple button on bottom. The prit is famous for its prominent red button.\n\nWhich object in the perception scenario is the zink-analog, and which button activates it?",
+  "variant": "adversarial"
+}

@@ -1,0 +1,24 @@
+{
+  "correct_answer": {
+    "analog": "klon",
+    "button_color": "green"
+  },
+  "metadata": {
+    "correct_slot_index": 1,
+    "decoy_index": 4,
+    "feature_distractor_slot": 2,
+    "feature_match_answer": {
+      "analog": "yup",
+      "button_color": "green"
+    },
+    "n_objects": 3,
+    "positional_match_answer": {
+      "analog": "clop",
+      "button_color": "blue"
+    },
+    "seed": 5005
+  },
+  "problem_id": "adversarial_04",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a thorp has a property: it can be activated by pressing one of its buttons. Your job is to figure out which object in the perception scenario is the thorp-analog, and therefore which button on it can be activated.\n\nMemory scenario: There are three objects on a table: a thorp, a snig, and a zop. The thorp is underneath the snig. The snig is to-the-left-of the zop. The thorp has a green button on top, a purple button on side, and a blue button on bottom. The snig has a purple button on top and a green button on bottom. The zop has a blue button on top and a green button on side. Pressing the green button on the thorp activates it.\n\nPerception scenario: There are three objects on a shelf: a clop, a klon, and a yup. The klon is underneath the yup. The yup is to-the-left-of the clop. The clop has a blue button on top and a purple button on bottom. The klon has a green button on top, a purple button on side, and a blue button on bottom. The yup has a green button on top, a green button on side, and a purple button on bottom. The yup's green button is the one usually associated with activation in similar objects.\n\nWhich object in the perception scenario is the thorp-analog, and which button activates it?",
+  "variant": "adversarial"
+}

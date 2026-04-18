@@ -1,0 +1,23 @@
+{
+  "correct_answer": {
+    "analog": "clop",
+    "button_color": "yellow"
+  },
+  "metadata": {
+    "correct_slot_index": 1,
+    "feature_distractor_slot": 2,
+    "feature_match_answer": {
+      "analog": "thorp",
+      "button_color": "yellow"
+    },
+    "n_objects": 3,
+    "positional_match_answer": {
+      "analog": "nop",
+      "button_color": "purple"
+    },
+    "seed": 2005
+  },
+  "problem_id": "feature_misleading_04",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a yup has a property: it can be activated by pressing one of its buttons. Your job is to figure out which object in the perception scenario is the yup-analog, and therefore which button on it can be activated.\n\nMemory scenario: There are three objects on a table: a yup, a florp, and a quib. The yup is underneath the florp. The florp is to-the-left-of the quib. The yup has a yellow button on top, a blue button on side, and a purple button on bottom. The florp has a blue button on top and a yellow button on bottom. The quib has a purple button on top and a yellow button on side. Pressing the yellow button on the yup activates it.\n\nPerception scenario: There are three objects on a shelf: a nop, a clop, and a thorp. The clop is underneath the thorp. The thorp is to-the-left-of the nop. The nop has a purple button on top and a blue button on bottom. The clop has a yellow button on top, a blue button on side, and a purple button on bottom. The thorp has a yellow button on top, a yellow button on side, and a blue button on bottom.\n\nWhich object in the perception scenario is the yup-analog, and which button activates it?",
+  "variant": "feature_misleading"
+}

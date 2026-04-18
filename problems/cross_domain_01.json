@@ -1,0 +1,24 @@
+{
+  "correct_answer": {
+    "analog": "trob",
+    "button_color": "blue"
+  },
+  "metadata": {
+    "correct_slot_index": 1,
+    "domain": "garden",
+    "feature_distractor_slot": 2,
+    "feature_match_answer": {
+      "analog": "nop",
+      "button_color": "blue"
+    },
+    "n_objects": 3,
+    "positional_match_answer": {
+      "analog": "corp",
+      "button_color": "yellow"
+    },
+    "seed": 4002
+  },
+  "problem_id": "cross_domain_01",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel plant called a jax has a property: it can be activated by one of its colored leafs. Your job is to figure out which plant in the perception scenario is the jax-analog, and therefore which colored leaf on it can be activated.\n\nMemory scenario: There are three plants in a garden: a jax, a scob, and a vro. The jax is-growing-under the scob. The scob is-to-the-left-of the vro. The jax has a blue colored leaf on top, a purple colored leaf on side, and a yellow colored leaf on bottom. The scob has a purple colored leaf on top and a blue colored leaf on bottom. The vro has a yellow colored leaf on top and a blue colored leaf on side. Clipping the blue leaf from the jax activates it.\n\nPerception scenario: There are three plants in a garden: a corp, a trob, and a nop. The trob is-growing-under the nop. The nop is-to-the-left-of the corp. The corp has a yellow colored leaf on top and a purple colored leaf on bottom. The trob has a blue colored leaf on top, a purple colored leaf on side, and a yellow colored leaf on bottom. The nop has a purple colored leaf on top and a blue colored leaf on side.\n\nWhich plant in the perception scenario is the jax-analog, and which colored leaf activates it?",
+  "variant": "cross_domain"
+}

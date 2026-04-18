@@ -1,0 +1,23 @@
+{
+  "correct_answer": {
+    "analog": "sploof",
+    "button_color": "purple"
+  },
+  "metadata": {
+    "correct_slot_index": 2,
+    "feature_distractor_slot": 1,
+    "feature_match_answer": {
+      "analog": "arn",
+      "button_color": "purple"
+    },
+    "n_objects": 3,
+    "positional_match_answer": {
+      "analog": "scob",
+      "button_color": "red"
+    },
+    "seed": 2002
+  },
+  "problem_id": "feature_misleading_01",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a xav has a property: it can be activated by pressing one of its buttons. Your job is to figure out which object in the perception scenario is the xav-analog, and therefore which button on it can be activated.\n\nMemory scenario: There are three objects on a table: a xav, a florp, and a fip. The xav is underneath the florp. The florp is to-the-left-of the fip. The xav has a purple button on top, a blue button on side, and a red button on bottom. The florp has a blue button on top and a purple button on bottom. The fip has a red button on top and a purple button on side. Pressing the purple button on the xav activates it.\n\nPerception scenario: There are three objects on a shelf: a scob, a arn, and a sploof. The sploof is underneath the arn. The arn is to-the-left-of the scob. The scob has a red button on top and a blue button on bottom. The arn has a purple button on top, a purple button on side, and a blue button on bottom. The sploof has a purple button on top, a blue button on side, and a red button on bottom.\n\nWhich object in the perception scenario is the xav-analog, and which button activates it?",
+  "variant": "feature_misleading"
+}

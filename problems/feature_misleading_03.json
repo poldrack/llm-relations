@@ -1,0 +1,23 @@
+{
+  "correct_answer": {
+    "analog": "prit",
+    "button_color": "blue"
+  },
+  "metadata": {
+    "correct_slot_index": 2,
+    "feature_distractor_slot": 0,
+    "feature_match_answer": {
+      "analog": "thorp",
+      "button_color": "blue"
+    },
+    "n_objects": 3,
+    "positional_match_answer": {
+      "analog": "thorp",
+      "button_color": "blue"
+    },
+    "seed": 2004
+  },
+  "problem_id": "feature_misleading_03",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a hask has a property: it can be activated by pressing one of its buttons. Your job is to figure out which object in the perception scenario is the hask-analog, and therefore which button on it can be activated.\n\nMemory scenario: There are three objects on a table: a hask, a florp, and a bep. The hask is underneath the florp. The florp is to-the-left-of the bep. The hask has a blue button on top, a red button on side, and a yellow button on bottom. The florp has a red button on top and a blue button on bottom. The bep has a yellow button on top and a blue button on side. Pressing the blue button on the hask activates it.\n\nPerception scenario: There are three objects on a shelf: a thorp, a muk, and a prit. The prit is underneath the thorp. The thorp is to-the-left-of the muk. The thorp has a blue button on top, a blue button on side, and a red button on bottom. The muk has a yellow button on top and a red button on bottom. The prit has a blue button on top, a red button on side, and a yellow button on bottom.\n\nWhich object in the perception scenario is the hask-analog, and which button activates it?",
+  "variant": "feature_misleading"
+}

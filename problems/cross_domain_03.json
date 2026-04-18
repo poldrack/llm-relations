@@ -1,0 +1,24 @@
+{
+  "correct_answer": {
+    "analog": "clop",
+    "button_color": "blue"
+  },
+  "metadata": {
+    "correct_slot_index": 2,
+    "domain": "enclosure",
+    "feature_distractor_slot": 1,
+    "feature_match_answer": {
+      "analog": "fip",
+      "button_color": "blue"
+    },
+    "n_objects": 3,
+    "positional_match_answer": {
+      "analog": "bep",
+      "button_color": "purple"
+    },
+    "seed": 4004
+  },
+  "problem_id": "cross_domain_03",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel animal called a wren has a property: it can be activated by one of its colored markings. Your job is to figure out which animal in the perception scenario is the wren-analog, and therefore which colored marking on it can be activated.\n\nMemory scenario: There are three animals in an enclosure: a wren, a vro, and a brall. The wren is-beneath the vro. The vro is-to-the-left-of the brall. The wren has a blue colored marking on top, a yellow colored marking on side, and a purple colored marking on bottom. The vro has a yellow colored marking on top and a blue colored marking on bottom. The brall has a purple colored marking on top and a blue colored marking on side. Touching the blue marking on the wren activates it.\n\nPerception scenario: There are three animals in an enclosure: a bep, a fip, and a clop. The clop is-beneath the fip. The fip is-to-the-left-of the bep. The bep has a purple colored marking on top and a yellow colored marking on bottom. The fip has a yellow colored marking on top and a blue colored marking on side. The clop has a blue colored marking on top, a yellow colored marking on side, and a purple colored marking on bottom.\n\nWhich animal in the perception scenario is the wren-analog, and which colored marking activates it?",
+  "variant": "cross_domain"
+}

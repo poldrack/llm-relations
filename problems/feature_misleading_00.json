@@ -1,0 +1,23 @@
+{
+  "correct_answer": {
+    "analog": "corp",
+    "button_color": "purple"
+  },
+  "metadata": {
+    "correct_slot_index": 1,
+    "feature_distractor_slot": 0,
+    "feature_match_answer": {
+      "analog": "zop",
+      "button_color": "purple"
+    },
+    "n_objects": 3,
+    "positional_match_answer": {
+      "analog": "zop",
+      "button_color": "purple"
+    },
+    "seed": 2001
+  },
+  "problem_id": "feature_misleading_00",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a oxim has a property: it can be activated by pressing one of its buttons. Your job is to figure out which object in the perception scenario is the oxim-analog, and therefore which button on it can be activated.\n\nMemory scenario: There are three objects on a table: a oxim, a greeble, and a muk. The oxim is underneath the greeble. The greeble is to-the-left-of the muk. The oxim has a purple button on top, a blue button on side, and a green button on bottom. The greeble has a blue button on top and a purple button on bottom. The muk has a green button on top and a purple button on side. Pressing the purple button on the oxim activates it.\n\nPerception scenario: There are three objects on a shelf: a zop, a corp, and a mek. The corp is underneath the zop. The zop is to-the-left-of the mek. The zop has a purple button on top, a purple button on side, and a blue button on bottom. The corp has a purple button on top, a blue button on side, and a green button on bottom. The mek has a green button on top and a blue button on bottom.\n\nWhich object in the perception scenario is the oxim-analog, and which button activates it?",
+  "variant": "feature_misleading"
+}

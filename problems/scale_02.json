@@ -1,0 +1,45 @@
+{
+  "correct_answer": {
+    "analog": "nurp",
+    "button_color": "green"
+  },
+  "metadata": {
+    "feature_match_answer": {
+      "analog": "zop",
+      "button_color": "green"
+    },
+    "memory_words": [
+      "moob",
+      "nop",
+      "xav",
+      "rask",
+      "tunk",
+      "twix"
+    ],
+    "n_objects": 6,
+    "perception_list_order": [
+      "dask",
+      "nurp",
+      "zant",
+      "ikk",
+      "brall",
+      "zop"
+    ],
+    "perception_words": [
+      "nurp",
+      "zop",
+      "zant",
+      "ikk",
+      "dask",
+      "brall"
+    ],
+    "positional_match_answer": {
+      "analog": "dask",
+      "button_color": "blue"
+    },
+    "seed": 3003
+  },
+  "problem_id": "scale_02",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a moob has a property: it can be activated by pressing one of its buttons. Your job is to figure out which object in the perception scenario is the moob-analog, and therefore which button on it can be activated.\n\nMemory scenario: There are 6 objects on a table: a moob, a nop, a xav, a rask, a tunk, and a twix. The moob is underneath the nop. The nop is to-the-left-of the xav. The xav is above the rask. The rask is to-the-right-of the tunk. The tunk is underneath the twix. The moob has a green button on top, a blue button on side, and a yellow button on bottom. The nop has a blue button on top and a green button on side. The xav has a blue button on top and a green button on bottom. The rask has a blue button on top and a green button on bottom. The tunk has a blue button on top and a green button on bottom. The twix has a yellow button on top and a green button on back. Pressing the green button on the moob activates it.\n\nPerception scenario: There are 6 objects on a shelf: a dask, a nurp, a zant, a ikk, a brall, and a zop. The nurp is underneath the zop. The zop is to-the-left-of the zant. The zant is above the ikk. The ikk is to-the-right-of the dask. The dask is underneath the brall. The dask has a blue button on top and a yellow button on bottom. The nurp has a green button on top, a blue button on side, and a yellow button on bottom. The zant has a blue button on top and a yellow button on bottom. The ikk has a blue button on top and a blue button on bottom. The brall has a yellow button on top and a blue button on bottom. The zop has a blue button on top, a green button on side, and a yellow button on bottom.\n\nWhich object in the perception scenario is the moob-analog, and which button activates it?",
+  "variant": "scale"
+}
