@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+.python-version
+results/raw/
+.ipynb_checkpoints/
