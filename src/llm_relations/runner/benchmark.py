@@ -157,6 +157,7 @@ SUMMARY_FIELDNAMES = [
     "n_samples", "n_correct", "accuracy",
     "n_feature_match", "n_positional_match", "n_other", "n_parse_error",
     "mean_output_tokens", "mean_latency_ms",
+    "mean_latency_ms_correct", "mean_latency_ms_error",
 ]
 
 
@@ -178,6 +179,9 @@ def _aggregate(records: list[SampleRecord]) -> dict[tuple[str, str, str], dict]:
                 "n_parse_error": 0,
                 "total_output_tokens": 0,
                 "total_latency_ms": 0,
+                "total_latency_ms_correct": 0,
+                "total_latency_ms_error": 0,
+                "n_error": 0,
             }
         agg = rows[key]
         agg["n_samples"] += 1
@@ -192,25 +196,38 @@ def _aggregate(records: list[SampleRecord]) -> dict[tuple[str, str, str], dict]:
             agg["n_other"] += 1
         agg["total_output_tokens"] += r.output_tokens
         agg["total_latency_ms"] += r.latency_ms
+        if r.is_correct:
+            agg["total_latency_ms_correct"] += r.latency_ms
+        else:
+            agg["total_latency_ms_error"] += r.latency_ms
+            agg["n_error"] += 1
     return rows
 
 
 def _agg_to_csv_row(agg: dict) -> dict:
     n = agg["n_samples"]
+    n_correct = agg["n_correct"]
+    n_error = agg["n_error"]
     return {
         "prompt_variant": agg["prompt_variant"],
         "model": agg["model"],
         "variant": agg["variant"],
         "problem_id": agg["problem_id"],
         "n_samples": n,
-        "n_correct": agg["n_correct"],
-        "accuracy": agg["n_correct"] / n if n else 0.0,
+        "n_correct": n_correct,
+        "accuracy": n_correct / n if n else 0.0,
         "n_feature_match": agg["n_feature_match"],
         "n_positional_match": agg["n_positional_match"],
         "n_other": agg["n_other"],
         "n_parse_error": agg["n_parse_error"],
         "mean_output_tokens": agg["total_output_tokens"] / n if n else 0,
         "mean_latency_ms": agg["total_latency_ms"] / n if n else 0,
+        "mean_latency_ms_correct": (
+            agg["total_latency_ms_correct"] / n_correct if n_correct else ""
+        ),
+        "mean_latency_ms_error": (
+            agg["total_latency_ms_error"] / n_error if n_error else ""
+        ),
     }
 
 
@@ -219,6 +236,36 @@ def _read_existing_summary(csv_path: Path) -> list[dict]:
         return []
     with csv_path.open(newline="") as f:
         return list(csv.DictReader(f))
+
+
+def rebuild_summary_from_disk(results_dir: Path) -> None:
+    """Rebuild ``summary.csv`` from every ``sample_*.json`` under ``raw/``.
+
+    Useful after changing ``SUMMARY_FIELDNAMES`` (e.g. adding new columns): a
+    regular ``run_benchmark`` call only re-aggregates keys it touches, so
+    untouched rows carry blanks for new columns. This walks the full on-disk
+    sample tree and writes a fresh, fully-populated summary.
+    """
+    raw_dir = results_dir / "raw"
+    if not raw_dir.exists():
+        return
+    all_records: list[SampleRecord] = []
+    # raw/{prompt_variant}/{safe_model}/{problem_id}/sample_*.json
+    for sample_file in raw_dir.rglob("sample_*.json"):
+        try:
+            data = json.loads(sample_file.read_text())
+            all_records.append(SampleRecord(**data))
+        except (json.JSONDecodeError, TypeError):
+            # Skip malformed / schema-drifted records rather than crash.
+            continue
+    rows = _aggregate(all_records)
+    csv_path = results_dir / "summary.csv"
+    results_dir.mkdir(parents=True, exist_ok=True)
+    with csv_path.open("w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=SUMMARY_FIELDNAMES)
+        writer.writeheader()
+        for agg in rows.values():
+            writer.writerow(_agg_to_csv_row(agg))
 
 
 def _write_summary(results_dir: Path, records: list[SampleRecord]) -> None:

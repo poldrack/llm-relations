@@ -502,6 +502,85 @@ def test_run_benchmark_variants_none_means_run_all(tmp_path: Path):
     assert client.call.call_count == 2
 
 
+def test_run_benchmark_summary_splits_mean_latency_by_correctness(tmp_path: Path):
+    """mean_latency_ms_correct and _error are averaged over matching samples only."""
+    p = _problem()
+    problems_dir = tmp_path / "problems"
+    problems_dir.mkdir()
+    save_problem(p, problems_dir / f"{p.problem_id}.json")
+    results_dir = tmp_path / "results"
+
+    # Interleave three correct (latency 100) and two incorrect (latency 400)
+    # responses. The client returns each in sequence.
+    correct_body = '```json\n{"analog": "mek", "button_color": "blue"}\n```'
+    wrong_body = '```json\n{"analog": "zop", "button_color": "blue"}\n```'
+    call_results = [
+        CallResult(response_text=correct_body, input_tokens=1, output_tokens=1,
+                   cache_read_input_tokens=0, latency_ms=100),
+        CallResult(response_text=wrong_body, input_tokens=1, output_tokens=1,
+                   cache_read_input_tokens=0, latency_ms=400),
+        CallResult(response_text=correct_body, input_tokens=1, output_tokens=1,
+                   cache_read_input_tokens=0, latency_ms=100),
+        CallResult(response_text=wrong_body, input_tokens=1, output_tokens=1,
+                   cache_read_input_tokens=0, latency_ms=400),
+        CallResult(response_text=correct_body, input_tokens=1, output_tokens=1,
+                   cache_read_input_tokens=0, latency_ms=100),
+    ]
+    client = MagicMock()
+    client.call.side_effect = call_results
+
+    run_benchmark(
+        problems_dir=problems_dir,
+        results_dir=results_dir,
+        model_specs=[_spec("claude-haiku-4-5-20251001", client)],
+        n_samples=5,
+    )
+
+    import csv as _csv
+    with (results_dir / "summary.csv").open() as f:
+        rows = list(_csv.DictReader(f))
+    assert len(rows) == 1
+    row = rows[0]
+    assert int(row["n_samples"]) == 5
+    assert int(row["n_correct"]) == 3
+    # Overall mean is the weighted avg of all five samples.
+    assert float(row["mean_latency_ms"]) == (3 * 100 + 2 * 400) / 5
+    # Mean over correct samples only: 100.
+    assert float(row["mean_latency_ms_correct"]) == 100.0
+    # Mean over error samples only: 400.
+    assert float(row["mean_latency_ms_error"]) == 400.0
+
+
+def test_run_benchmark_summary_latency_columns_empty_when_bucket_empty(tmp_path: Path):
+    """If all samples are correct (or all are errors), the empty bucket is blank."""
+    p = _problem()
+    problems_dir = tmp_path / "problems"
+    problems_dir.mkdir()
+    save_problem(p, problems_dir / f"{p.problem_id}.json")
+    results_dir = tmp_path / "results"
+
+    client = _client_returning(
+        '```json\n{"analog": "mek", "button_color": "blue"}\n```'
+    )
+
+    run_benchmark(
+        problems_dir=problems_dir,
+        results_dir=results_dir,
+        model_specs=[_spec("claude-haiku-4-5-20251001", client)],
+        n_samples=2,
+    )
+
+    import csv as _csv
+    with (results_dir / "summary.csv").open() as f:
+        rows = list(_csv.DictReader(f))
+    assert len(rows) == 1
+    row = rows[0]
+    assert int(row["n_correct"]) == 2
+    # Correct bucket populated, error bucket empty.
+    assert row["mean_latency_ms_correct"] != ""
+    assert row["mean_latency_ms_error"] == ""
+
+
 def test_run_benchmark_sample_index_skips_gaps(tmp_path: Path):
     """Gaps in sample numbering are not filled — new samples land at max+1."""
     p = _problem()
