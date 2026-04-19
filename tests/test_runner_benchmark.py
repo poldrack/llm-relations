@@ -342,3 +342,41 @@ def test_run_benchmark_sanitizes_slashes_in_display_name_for_on_disk_path(tmp_pa
     # The summary CSV also carries the unsanitized name.
     summary = (results_dir / "summary.csv").read_text()
     assert "lmstudio:google/gemma-3n-e4b" in summary
+
+
+def test_run_benchmark_appends_samples_when_prior_exist(tmp_path: Path):
+    p = _problem()
+    problems_dir = tmp_path / "problems"
+    problems_dir.mkdir()
+    save_problem(p, problems_dir / f"{p.problem_id}.json")
+    results_dir = tmp_path / "results"
+
+    client = _client_returning(
+        '```json\n{"analog": "mek", "button_color": "blue"}\n```'
+    )
+    spec = _spec("claude-haiku-4-5-20251001", client)
+
+    # First run: writes sample_0.json and sample_1.json
+    run_benchmark(
+        problems_dir=problems_dir, results_dir=results_dir,
+        model_specs=[spec], n_samples=2, use_cot=True,
+    )
+    # Second run: should write sample_2.json and sample_3.json (not overwrite)
+    run_benchmark(
+        problems_dir=problems_dir, results_dir=results_dir,
+        model_specs=[spec], n_samples=2, use_cot=True,
+    )
+
+    target_dir = (
+        results_dir / "raw" / "cot" / "claude-haiku-4-5-20251001" / p.problem_id
+    )
+    files = sorted(f.name for f in target_dir.glob("sample_*.json"))
+    assert files == [
+        "sample_0.json", "sample_1.json", "sample_2.json", "sample_3.json"
+    ], files
+
+    # Each record's `sample` field matches its filename index.
+    for name in files:
+        idx = int(name.removeprefix("sample_").removesuffix(".json"))
+        rec = json.loads((target_dir / name).read_text())
+        assert rec["sample"] == idx
