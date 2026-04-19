@@ -46,9 +46,13 @@ def main() -> None:
         ),
     )
     parser.add_argument(
-        "--no-cot",
-        action="store_true",
-        help="Omit the 'think step by step' instruction from the system prompt.",
+        "--prompt-variant",
+        default="cot",
+        help=(
+            "System-prompt variant. One of: cot (default), no_cot, "
+            "graphical_model. See src/llm_relations/runner/client.py "
+            "for the registry."
+        ),
     )
     parser.add_argument(
         "--lmstudio-url",
@@ -68,7 +72,7 @@ def main() -> None:
         results_dir=args.results_dir,
         model_specs=specs,
         n_samples=args.n_samples,
-        use_cot=not args.no_cot,
+        prompt_variant=args.prompt_variant,
         variants=args.variants,
     )
     print(f"Done. Summary at {args.results_dir / 'summary.csv'}")
