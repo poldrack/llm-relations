@@ -128,3 +128,29 @@ def test_client_constructs_anthropic_without_base_url_when_omitted(mocker):
     fake_anthropic_cls = mocker.patch("llm_relations.runner.client.Anthropic")
     ClaudeClient(api_key="test-key")
     fake_anthropic_cls.assert_called_once_with(api_key="test-key", base_url=None)
+
+
+def test_client_call_sends_plain_string_system_when_caching_disabled(mocker):
+    fake_anthropic = MagicMock()
+    fake_anthropic.messages.create.return_value = _mock_message("ok")
+    mocker.patch("llm_relations.runner.client.Anthropic", return_value=fake_anthropic)
+
+    client = ClaudeClient(api_key="test-key", cache_system_prompt=False)
+    client.call(model="some-model", user_prompt="Solve.", system_prompt="SYS")
+
+    call_kwargs = fake_anthropic.messages.create.call_args.kwargs
+    assert call_kwargs["system"] == "SYS"
+
+
+def test_client_call_default_still_sends_cached_system_block(mocker):
+    fake_anthropic = MagicMock()
+    fake_anthropic.messages.create.return_value = _mock_message("ok")
+    mocker.patch("llm_relations.runner.client.Anthropic", return_value=fake_anthropic)
+
+    client = ClaudeClient(api_key="test-key")
+    client.call(model="some-model", user_prompt="Solve.", system_prompt="SYS")
+
+    call_kwargs = fake_anthropic.messages.create.call_args.kwargs
+    assert call_kwargs["system"] == [
+        {"type": "text", "text": "SYS", "cache_control": {"type": "ephemeral"}}
+    ]

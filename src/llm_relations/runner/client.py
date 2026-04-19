@@ -58,10 +58,12 @@ class ClaudeClient:
         max_retries: int = 5,
         base_delay: float = 2.0,
         base_url: str | None = None,
+        cache_system_prompt: bool = True,
     ):
         self._client = Anthropic(api_key=api_key, base_url=base_url)
         self._max_retries = max_retries
         self._base_delay = base_delay
+        self._cache_system_prompt = cache_system_prompt
 
     def call(
         self,
@@ -71,6 +73,17 @@ class ClaudeClient:
         temperature: float = 1.0,
         system_prompt: str = SYSTEM_PROMPT,
     ) -> CallResult:
+        if self._cache_system_prompt:
+            system_arg = [
+                {
+                    "type": "text",
+                    "text": system_prompt,
+                    "cache_control": {"type": "ephemeral"},
+                }
+            ]
+        else:
+            system_arg = system_prompt
+
         attempt = 0
         while True:
             start = time.time()
@@ -79,13 +92,7 @@ class ClaudeClient:
                     model=model,
                     max_tokens=max_tokens,
                     temperature=temperature,
-                    system=[
-                        {
-                            "type": "text",
-                            "text": system_prompt,
-                            "cache_control": {"type": "ephemeral"},
-                        }
-                    ],
+                    system=system_arg,
                     messages=[{"role": "user", "content": user_prompt}],
                 )
             except (RateLimitError, APIStatusError) as e:
