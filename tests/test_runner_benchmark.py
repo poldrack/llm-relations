@@ -419,3 +419,63 @@ def test_run_benchmark_summary_aggregates_across_prior_and_new_samples(
     assert int(row["n_samples"]) == 4, row
     assert int(row["n_correct"]) == 4, row
     assert float(row["accuracy"]) == 1.0, row
+
+
+def test_run_benchmark_sample_index_skips_gaps(tmp_path: Path):
+    """Gaps in sample numbering are not filled — new samples land at max+1."""
+    p = _problem()
+    problems_dir = tmp_path / "problems"
+    problems_dir.mkdir()
+    save_problem(p, problems_dir / f"{p.problem_id}.json")
+    results_dir = tmp_path / "results"
+
+    # Pre-create sample_0.json and sample_2.json by hand.
+    target_dir = (
+        results_dir / "raw" / "cot" / "claude-haiku-4-5-20251001" / p.problem_id
+    )
+    target_dir.mkdir(parents=True)
+
+    def _stub_record(idx: int) -> dict:
+        return {
+            "problem_id": p.problem_id,
+            "model": "claude-haiku-4-5-20251001",
+            "sample": idx,
+            "variant": "baseline",
+            "prompt_variant": "cot",
+            "prompt": "prompt",
+            "response_text": "stub",
+            "parsed_answer": {"analog": "mek", "button_color": "blue"},
+            "correct_answer": {"analog": "mek", "button_color": "blue"},
+            "is_correct": True,
+            "error_type": None,
+            "parse_error": False,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "latency_ms": 0,
+            "timestamp": "1970-01-01T00:00:00+00:00",
+        }
+
+    (target_dir / "sample_0.json").write_text(
+        json.dumps(_stub_record(0), indent=2, sort_keys=True)
+    )
+    (target_dir / "sample_2.json").write_text(
+        json.dumps(_stub_record(2), indent=2, sort_keys=True)
+    )
+
+    client = _client_returning(
+        '```json\n{"analog": "mek", "button_color": "blue"}\n```'
+    )
+
+    run_benchmark(
+        problems_dir=problems_dir, results_dir=results_dir,
+        model_specs=[_spec("claude-haiku-4-5-20251001", client)],
+        n_samples=1, use_cot=True,
+    )
+
+    files = sorted(f.name for f in target_dir.glob("sample_*.json"))
+    assert files == [
+        "sample_0.json", "sample_2.json", "sample_3.json"
+    ], files
+    # The newly written record is index 3.
+    rec = json.loads((target_dir / "sample_3.json").read_text())
+    assert rec["sample"] == 3
