@@ -63,15 +63,19 @@ def test_mixed_list_shares_one_client_per_provider():
         anthropic_api_key="key",
         lmstudio_url="http://127.0.0.1:1234",
     )
-    anthropic_clients = {id(s.client) for s in specs if not s.display_name.startswith("lmstudio:")}
-    lmstudio_clients = {id(s.client) for s in specs if s.display_name.startswith("lmstudio:")}
+    anthropic_clients = {id(s.client) for s in specs if not s.display_name.startswith(LMSTUDIO_PREFIX)}
+    lmstudio_clients = {id(s.client) for s in specs if s.display_name.startswith(LMSTUDIO_PREFIX)}
     assert len(anthropic_clients) == 1
     assert len(lmstudio_clients) == 1
     # And the two providers must use distinct client instances.
     assert anthropic_clients.isdisjoint(lmstudio_clients)
 
 
-def test_lmstudio_client_constructed_with_base_url_and_no_cache(mocker):
+def test_lmstudio_client_constructed_with_lmstudio_base_url(mocker):
+    """Caching disabled-ness is verified separately in
+    test_lmstudio_client_disables_system_prompt_caching; this test only
+    checks the Anthropic constructor receives the LMStudio base_url and
+    a placeholder api_key."""
     fake_anthropic_cls = mocker.patch("llm_relations.runner.client.Anthropic")
     build_model_specs(
         ["lmstudio:google/gemma-3n-e4b"],
