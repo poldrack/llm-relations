@@ -380,3 +380,42 @@ def test_run_benchmark_appends_samples_when_prior_exist(tmp_path: Path):
         idx = int(name.removeprefix("sample_").removesuffix(".json"))
         rec = json.loads((target_dir / name).read_text())
         assert rec["sample"] == idx
+
+
+def test_run_benchmark_summary_aggregates_across_prior_and_new_samples(
+    tmp_path: Path,
+):
+    p = _problem()
+    problems_dir = tmp_path / "problems"
+    problems_dir.mkdir()
+    save_problem(p, problems_dir / f"{p.problem_id}.json")
+    results_dir = tmp_path / "results"
+
+    client = _client_returning(
+        '```json\n{"analog": "mek", "button_color": "blue"}\n```'
+    )
+    spec = _spec("claude-haiku-4-5-20251001", client)
+
+    run_benchmark(
+        problems_dir=problems_dir, results_dir=results_dir,
+        model_specs=[spec], n_samples=2, use_cot=True,
+    )
+    run_benchmark(
+        problems_dir=problems_dir, results_dir=results_dir,
+        model_specs=[spec], n_samples=2, use_cot=True,
+    )
+
+    import csv as _csv
+    with (results_dir / "summary.csv").open() as f:
+        rows = list(_csv.DictReader(f))
+    matching = [
+        r for r in rows
+        if r["prompt_variant"] == "cot"
+        and r["model"] == "claude-haiku-4-5-20251001"
+        and r["problem_id"] == p.problem_id
+    ]
+    assert len(matching) == 1, matching
+    row = matching[0]
+    assert int(row["n_samples"]) == 4, row
+    assert int(row["n_correct"]) == 4, row
+    assert float(row["accuracy"]) == 1.0, row
