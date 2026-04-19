@@ -18,6 +18,14 @@ _COT_INSTRUCTION = (
     "mapping that preserves relational structure, then answer."
 )
 
+_GRAPHICAL_MODEL_INSTRUCTION = (
+    "Before answering, build an explicit graphical model of each scenario. Represent "
+    "objects as nodes and the relations between them (e.g. 'underneath', "
+    "'to-the-left-of') as labeled directed edges. Write out both graphs. Then find "
+    "the mapping between the perception graph and the memory graph that preserves "
+    "edge labels and direction, and use that mapping to answer."
+)
+
 _ANSWER_FORMAT = (
     "End your response with a JSON block in this exact format:\n"
     "```json\n"
@@ -26,15 +34,28 @@ _ANSWER_FORMAT = (
 )
 
 
-def build_system_prompt(use_cot: bool = True) -> str:
+PROMPT_VARIANTS: dict[str, str] = {
+    "cot": _COT_INSTRUCTION,
+    "no_cot": "",
+    "graphical_model": _GRAPHICAL_MODEL_INSTRUCTION,
+}
+
+
+def build_system_prompt(prompt_variant: str = "cot") -> str:
+    if prompt_variant not in PROMPT_VARIANTS:
+        raise ValueError(
+            f"Unknown prompt_variant {prompt_variant!r}. "
+            f"Valid variants: {sorted(PROMPT_VARIANTS)}"
+        )
+    instruction = PROMPT_VARIANTS[prompt_variant]
     parts = [_TASK_DESCRIPTION]
-    if use_cot:
-        parts.append(_COT_INSTRUCTION)
+    if instruction:
+        parts.append(instruction)
     parts.append(_ANSWER_FORMAT)
     return "\n\n".join(parts)
 
 
-SYSTEM_PROMPT = build_system_prompt(use_cot=True)
+SYSTEM_PROMPT = build_system_prompt("cot")
 
 
 @dataclass(frozen=True)

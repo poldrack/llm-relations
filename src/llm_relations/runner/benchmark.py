@@ -306,7 +306,7 @@ def run_benchmark(
     results_dir: Path,
     model_specs: list[ModelSpec],
     n_samples: int,
-    use_cot: bool = True,
+    prompt_variant: str = "cot",
     variants: Optional[list[str]] = None,
 ) -> None:
     problems = [load_problem(f) for f in sorted(problems_dir.glob("*.json"))]
@@ -324,8 +324,7 @@ def run_benchmark(
             raise ValueError(
                 f"No problems matched variants={sorted(requested)} in {problems_dir}"
             )
-    system_prompt = build_system_prompt(use_cot=use_cot)
-    prompt_variant = "cot" if use_cot else "no_cot"
+    system_prompt = build_system_prompt(prompt_variant)
     records: list[SampleRecord] = []
     for spec in model_specs:
         for problem in problems:
