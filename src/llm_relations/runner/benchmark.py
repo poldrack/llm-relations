@@ -125,8 +125,16 @@ def _load_samples_on_disk(
     out_dir = results_dir / "raw" / prompt_variant / safe_model / problem_id
     if not out_dir.exists():
         return []
+    indexed: list[tuple[int, Path]] = []
+    for f in out_dir.glob("sample_*.json"):
+        try:
+            idx = int(f.stem.removeprefix("sample_"))
+        except ValueError:
+            continue
+        indexed.append((idx, f))
+    indexed.sort()
     samples: list[SampleRecord] = []
-    for f in sorted(out_dir.glob("sample_*.json")):
+    for _idx, f in indexed:
         data = json.loads(f.read_text())
         samples.append(SampleRecord(**data))
     return samples
