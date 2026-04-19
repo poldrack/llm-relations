@@ -71,6 +71,34 @@ def _run_one_sample(
     )
 
 
+def _next_sample_index(
+    results_dir: Path,
+    prompt_variant: str,
+    display_name: str,
+    problem_id: str,
+) -> int:
+    """Return the next unused sample index for a given (variant, model, problem).
+
+    Scans `results/raw/{prompt_variant}/{safe_model}/{problem_id}/` for files
+    named `sample_N.json` and returns `max(N) + 1`. Returns 0 if the directory
+    does not exist or contains no well-formed sample files. Gaps are not
+    filled — new samples always land at `max + 1`.
+    """
+    safe_model = display_name.replace("/", "_")
+    out_dir = results_dir / "raw" / prompt_variant / safe_model / problem_id
+    if not out_dir.exists():
+        return 0
+    max_idx = -1
+    for f in out_dir.glob("sample_*.json"):
+        try:
+            idx = int(f.stem.removeprefix("sample_"))
+        except ValueError:
+            continue
+        if idx > max_idx:
+            max_idx = idx
+    return max_idx + 1
+
+
 def _write_sample(results_dir: Path, record: SampleRecord) -> None:
     # Sanitize for filesystem use only — the JSON record and summary CSV keep
     # the unsanitized display_name. Slashes in model names (e.g.
@@ -186,9 +214,12 @@ def run_benchmark(
     records: list[SampleRecord] = []
     for spec in model_specs:
         for problem in problems:
-            for s in range(n_samples):
+            start = _next_sample_index(
+                results_dir, prompt_variant, spec.display_name, problem.problem_id
+            )
+            for i in range(n_samples):
                 record = _run_one_sample(
-                    spec, s, problem, system_prompt, prompt_variant
+                    spec, start + i, problem, system_prompt, prompt_variant
                 )
                 _write_sample(results_dir, record)
                 records.append(record)
