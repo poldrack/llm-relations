@@ -421,6 +421,87 @@ def test_run_benchmark_summary_aggregates_across_prior_and_new_samples(
     assert float(row["accuracy"]) == 1.0, row
 
 
+def _problem_with_variant(pid: str, variant: str) -> Problem:
+    return Problem(
+        problem_id=pid,
+        variant=variant,
+        prompt_text="prompt",
+        correct_answer={"analog": "mek", "button_color": "blue"},
+        metadata={
+            "n_objects": 3,
+            "feature_match_answer": {"analog": "zop", "button_color": "blue"},
+            "positional_match_answer": {"analog": "quib", "button_color": "green"},
+        },
+    )
+
+
+def test_run_benchmark_variants_filter_restricts_to_matching_problems(tmp_path: Path):
+    problems_dir = tmp_path / "problems"
+    problems_dir.mkdir()
+    save_problem(_problem_with_variant("baseline_00", "baseline"), problems_dir / "baseline_00.json")
+    save_problem(_problem_with_variant("cross_domain_00", "cross_domain"), problems_dir / "cross_domain_00.json")
+    save_problem(_problem_with_variant("cross_domain_01", "cross_domain"), problems_dir / "cross_domain_01.json")
+    save_problem(_problem_with_variant("control_00", "control"), problems_dir / "control_00.json")
+
+    results_dir = tmp_path / "results"
+    client = _client_returning(
+        '```json\n{"analog": "mek", "button_color": "blue"}\n```'
+    )
+
+    run_benchmark(
+        problems_dir=problems_dir,
+        results_dir=results_dir,
+        model_specs=[_spec("claude-haiku-4-5-20251001", client)],
+        n_samples=1,
+        variants=["cross_domain"],
+    )
+
+    # Only the two cross_domain problems should have been called.
+    assert client.call.call_count == 2
+    written = sorted(
+        f.parent.name for f in (results_dir / "raw").rglob("sample_*.json")
+    )
+    assert written == ["cross_domain_00", "cross_domain_01"]
+
+
+def test_run_benchmark_variants_filter_rejects_unknown_variant(tmp_path: Path):
+    problems_dir = tmp_path / "problems"
+    problems_dir.mkdir()
+    save_problem(_problem_with_variant("baseline_00", "baseline"), problems_dir / "baseline_00.json")
+
+    import pytest
+
+    with pytest.raises(ValueError, match="Unknown variant"):
+        run_benchmark(
+            problems_dir=problems_dir,
+            results_dir=tmp_path / "results",
+            model_specs=[_spec("claude-haiku-4-5-20251001", _client_returning(""))],
+            n_samples=1,
+            variants=["nonsense"],
+        )
+
+
+def test_run_benchmark_variants_none_means_run_all(tmp_path: Path):
+    problems_dir = tmp_path / "problems"
+    problems_dir.mkdir()
+    save_problem(_problem_with_variant("baseline_00", "baseline"), problems_dir / "baseline_00.json")
+    save_problem(_problem_with_variant("cross_domain_00", "cross_domain"), problems_dir / "cross_domain_00.json")
+
+    client = _client_returning(
+        '```json\n{"analog": "mek", "button_color": "blue"}\n```'
+    )
+
+    run_benchmark(
+        problems_dir=problems_dir,
+        results_dir=tmp_path / "results",
+        model_specs=[_spec("claude-haiku-4-5-20251001", client)],
+        n_samples=1,
+        # variants omitted
+    )
+
+    assert client.call.call_count == 2
+
+
 def test_run_benchmark_sample_index_skips_gaps(tmp_path: Path):
     """Gaps in sample numbering are not filled — new samples land at max+1."""
     p = _problem()

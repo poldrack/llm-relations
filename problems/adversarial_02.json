@@ -1,24 +1,40 @@
 {
   "correct_answer": {
-    "analog": "jorp",
-    "button_color": "yellow"
+    "analog": "vask",
+    "button_color": "red"
   },
   "metadata": {
+    "activation_position": "top",
     "correct_slot_index": 2,
     "decoy_index": 2,
     "feature_distractor_slot": 0,
     "feature_match_answer": {
-      "analog": "vask",
-      "button_color": "yellow"
+      "analog": "lurn",
+      "button_color": "brown"
     },
+    "feature_twin_role": 2,
+    "filler_role": 0,
+    "memory_slot_order": [
+      0,
+      1
+    ],
+    "memory_target_name": "arn",
     "n_objects": 3,
+    "perception_slot_order": [
+      0,
+      1
+    ],
     "positional_match_answer": {
-      "analog": "vask",
-      "button_color": "yellow"
+      "analog": "lurn",
+      "button_color": "brown"
     },
-    "seed": 5003
+    "seed": 5003,
+    "slot_orders_aligned": true,
+    "structural_correct_analog": "vask",
+    "structural_correct_button_color": "red",
+    "target_role": 1
   },
   "problem_id": "adversarial_02",
-  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a krink has a property: it can be activated by pressing one of its buttons. Your job is to figure out which object in the perception scenario is the krink-analog, and therefore which button on it can be activated.\n\nMemory scenario: There are three objects on a table: a krink, a arn, and a yib. The krink is underneath the arn. The arn is to-the-left-of the yib. The krink has a yellow button on top, a purple button on side, and a green button on bottom. The arn has a purple button on top and a yellow button on bottom. The yib has a green button on top and a yellow button on side. Pressing the yellow button on the krink activates it.\n\nPerception scenario: There are three objects on a shelf: a vask, a lurn, and a jorp. The jorp is underneath the vask. The vask is to-the-left-of the lurn. The vask has a yellow button on top, a yellow button on side, and a purple button on bottom. The lurn has a green button on top and a purple button on bottom. The jorp has a yellow button on top, a purple button on side, and a green button on bottom. People who have interacted with the vask report that its yellow button is the one you press first.\n\nWhich object in the perception scenario is the krink-analog, and which button activates it?",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a arn has a property: it can be activated by pressing the button at a specific position on it. Your job is to figure out which object in the perception scenario is the arn-analog, and therefore which button on it activates it.\n\nMemory scenario: There are three objects on a table: a krink, a arn, and a yib. The krink is underneath the arn. The arn is to-the-left-of the yib. The krink has a red button on top, a yellow button on side, and a purple button on bottom. The arn has a brown button on top, a pink button on side, and a cyan button on bottom. The yib has a orange button on top, a green button on side, and a black button on bottom. Pressing the button on the top of the arn activates it.\n\nPerception scenario: There are three objects on a shelf: a lurn, a jorp, and a vask. The jorp is underneath the vask. The vask is to-the-left-of the lurn. The lurn has a brown button on top, a pink button on side, and a cyan button on bottom. The jorp has a green button on top, a orange button on side, and a black button on bottom. The vask has a red button on top, a purple button on side, and a yellow button on bottom. People who have interacted with the lurn report that its brown button is the one you press first.\n\nWhich object in the perception scenario is the arn-analog, and which button activates it? Answer as a fenced JSON block with keys `analog` (the perception object's name) and `button_color` (the color of the activating button on that object).",
   "variant": "adversarial"
 }

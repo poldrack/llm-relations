@@ -1,42 +1,48 @@
 {
   "correct_answer": {
-    "analog": "woz",
-    "button_color": "yellow"
+    "analog": "flen",
+    "button_color": "red"
   },
   "metadata": {
+    "activation_position": "bottom",
     "feature_match_answer": {
-      "analog": "scob",
-      "button_color": "yellow"
+      "analog": "florp",
+      "button_color": "brown"
     },
+    "feature_twin_role": 0,
+    "memory_target_name": "emp",
     "memory_words": [
+      "snig",
+      "yib",
       "rast",
-      "drog",
-      "grup",
-      "mek",
-      "twix"
+      "emp",
+      "jorp"
     ],
     "n_objects": 5,
     "perception_list_order": [
-      "pell",
-      "prit",
-      "woz",
-      "scob",
-      "ikk"
+      "zop",
+      "dask",
+      "jax",
+      "flen",
+      "florp"
     ],
     "perception_words": [
-      "woz",
-      "scob",
-      "ikk",
-      "pell",
-      "prit"
+      "florp",
+      "zop",
+      "jax",
+      "flen",
+      "dask"
     ],
     "positional_match_answer": {
-      "analog": "pell",
-      "button_color": "blue"
+      "analog": "zop",
+      "button_color": "green"
     },
-    "seed": 3000
+    "seed": 3002,
+    "structural_correct_analog": "flen",
+    "structural_correct_button_color": "red",
+    "target_role": 3
   },
   "problem_id": "scale_01",
-  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a rast has a property: it can be activated by pressing one of its buttons. Your job is to figure out which object in the perception scenario is the rast-analog, and therefore which button on it can be activated.\n\nMemory scenario: There are 5 objects on a table: a rast, a drog, a grup, a mek, and a twix. The rast is underneath the drog. The drog is to-the-left-of the grup. The grup is above the mek. The mek is to-the-right-of the twix. The rast has a yellow button on top, a green button on side, and a blue button on bottom. The drog has a green button on top and a yellow button on side. The grup has a green button on top and a yellow button on front. The mek has a blue button on top and a yellow button on back. The twix has a blue button on top and a yellow button on front. Pressing the yellow button on the rast activates it.\n\nPerception scenario: There are 5 objects on a shelf: a pell, a prit, a woz, a scob, and a ikk. The woz is underneath the scob. The scob is to-the-left-of the ikk. The ikk is above the pell. The pell is to-the-right-of the prit. The pell has a blue button on top and a blue button on bottom. The prit has a green button on top and a blue button on bottom. The woz has a yellow button on top, a green button on side, and a blue button on bottom. The scob has a green button on top, a yellow button on side, and a blue button on bottom. The ikk has a blue button on top and a green button on bottom.\n\nWhich object in the perception scenario is the rast-analog, and which button activates it?",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a emp has a property: it can be activated by pressing the button at a specific position on it. Your job is to figure out which object in the perception scenario is the emp-analog, and therefore which button on it activates it.\n\nMemory scenario: There are 5 objects on a table: a snig, a yib, a rast, a emp, and a jorp. The snig is underneath the yib. The yib is to-the-left-of the rast. The rast is above the emp. The emp is to-the-right-of the jorp. The snig has a purple button on top, a orange button on side, and a green button on bottom. The yib has a red button on top, a black button on side, and a pink button on bottom. The rast has a purple button on top, a green button on side, and a orange button on bottom. The emp has a cyan button on top, a blue button on side, and a brown button on bottom. The jorp has a black button on top, a red button on side, and a pink button on bottom. Pressing the button on the bottom of the emp activates it.\n\nPerception scenario: There are 5 objects on a shelf: a zop, a dask, a jax, a flen, and a florp. The florp is underneath the zop. The zop is to-the-left-of the jax. The jax is above the flen. The flen is to-the-right-of the dask. The zop has a orange button on top, a purple button on side, and a green button on bottom. The dask has a orange button on top, a purple button on side, and a green button on bottom. The jax has a orange button on top, a green button on side, and a purple button on bottom. The flen has a black button on top, a pink button on side, and a red button on bottom. The florp has a cyan button on top, a blue button on side, and a brown button on bottom.\n\nWhich object in the perception scenario is the emp-analog, and which button activates it? Answer as a fenced JSON block with keys `analog` and `button_color`.",
   "variant": "scale"
 }

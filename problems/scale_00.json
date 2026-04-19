@@ -1,39 +1,45 @@
 {
   "correct_answer": {
-    "analog": "jorp",
-    "button_color": "yellow"
+    "analog": "brall",
+    "button_color": "purple"
   },
   "metadata": {
+    "activation_position": "bottom",
     "feature_match_answer": {
-      "analog": "florp",
-      "button_color": "yellow"
+      "analog": "klon",
+      "button_color": "orange"
     },
+    "feature_twin_role": 3,
+    "memory_target_name": "vask",
     "memory_words": [
-      "snig",
-      "yib",
-      "rast",
-      "emp"
+      "vask",
+      "vro",
+      "yup",
+      "pell"
     ],
     "n_objects": 4,
     "perception_list_order": [
-      "jax",
-      "zop",
-      "jorp",
-      "florp"
+      "klon",
+      "corp",
+      "rask",
+      "brall"
     ],
     "perception_words": [
-      "jorp",
-      "florp",
-      "zop",
-      "jax"
+      "brall",
+      "corp",
+      "rask",
+      "klon"
     ],
     "positional_match_answer": {
-      "analog": "jax",
-      "button_color": "green"
+      "analog": "klon",
+      "button_color": "orange"
     },
-    "seed": 3002
+    "seed": 3001,
+    "structural_correct_analog": "brall",
+    "structural_correct_button_color": "purple",
+    "target_role": 0
   },
   "problem_id": "scale_00",
-  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a snig has a property: it can be activated by pressing one of its buttons. Your job is to figure out which object in the perception scenario is the snig-analog, and therefore which button on it can be activated.\n\nMemory scenario: There are 4 objects on a table: a snig, a yib, a rast, and a emp. The snig is underneath the yib. The yib is to-the-left-of the rast. The rast is above the emp. The snig has a yellow button on top, a purple button on side, and a green button on bottom. The yib has a purple button on top and a yellow button on bottom. The rast has a purple button on top and a yellow button on front. The emp has a purple button on top and a yellow button on front. Pressing the yellow button on the snig activates it.\n\nPerception scenario: There are 4 objects on a shelf: a jax, a zop, a jorp, and a florp. The jorp is underneath the florp. The florp is to-the-left-of the zop. The zop is above the jax. The jax has a green button on top and a green button on bottom. The zop has a green button on top and a purple button on bottom. The jorp has a yellow button on top, a purple button on side, and a green button on bottom. The florp has a purple button on top, a yellow button on side, and a green button on bottom.\n\nWhich object in the perception scenario is the snig-analog, and which button activates it?",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a vask has a property: it can be activated by pressing the button at a specific position on it. Your job is to figure out which object in the perception scenario is the vask-analog, and therefore which button on it activates it.\n\nMemory scenario: There are 4 objects on a table: a vask, a vro, a yup, and a pell. The vask is underneath the vro. The vro is to-the-left-of the yup. The yup is above the pell. The vask has a brown button on top, a cyan button on side, and a orange button on bottom. The vro has a green button on top, a yellow button on side, and a purple button on bottom. The yup has a pink button on top, a black button on side, and a blue button on bottom. The pell has a purple button on top, a green button on side, and a yellow button on bottom. Pressing the button on the bottom of the vask activates it.\n\nPerception scenario: There are 4 objects on a shelf: a klon, a corp, a rask, and a brall. The brall is underneath the corp. The corp is to-the-left-of the rask. The rask is above the klon. The klon has a brown button on top, a cyan button on side, and a orange button on bottom. The corp has a pink button on top, a black button on side, and a blue button on bottom. The rask has a blue button on top, a pink button on side, and a black button on bottom. The brall has a yellow button on top, a green button on side, and a purple button on bottom.\n\nWhich object in the perception scenario is the vask-analog, and which button activates it? Answer as a fenced JSON block with keys `analog` and `button_color`.",
   "variant": "scale"
 }

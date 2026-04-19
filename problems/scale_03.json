@@ -1,13 +1,16 @@
 {
   "correct_answer": {
-    "analog": "tunk",
-    "button_color": "blue"
+    "analog": "nurp",
+    "button_color": "yellow"
   },
   "metadata": {
+    "activation_position": "top",
     "feature_match_answer": {
-      "analog": "greeble",
+      "analog": "wix",
       "button_color": "blue"
     },
+    "feature_twin_role": 4,
+    "memory_target_name": "dask",
     "memory_words": [
       "clop",
       "wren",
@@ -19,13 +22,13 @@
     ],
     "n_objects": 7,
     "perception_list_order": [
-      "woz",
-      "nurp",
-      "greeble",
       "quib",
+      "greeble",
+      "brall",
       "wix",
+      "nurp",
       "tunk",
-      "brall"
+      "woz"
     ],
     "perception_words": [
       "tunk",
@@ -37,12 +40,15 @@
       "brall"
     ],
     "positional_match_answer": {
-      "analog": "woz",
-      "button_color": "yellow"
+      "analog": "quib",
+      "button_color": "cyan"
     },
-    "seed": 3004
+    "seed": 3004,
+    "structural_correct_analog": "nurp",
+    "structural_correct_button_color": "yellow",
+    "target_role": 5
   },
   "problem_id": "scale_03",
-  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a clop has a property: it can be activated by pressing one of its buttons. Your job is to figure out which object in the perception scenario is the clop-analog, and therefore which button on it can be activated.\n\nMemory scenario: There are 7 objects on a table: a clop, a wren, a thorp, a vro, a mek, a dask, and a xav. The clop is underneath the wren. The wren is to-the-left-of the thorp. The thorp is above the vro. The vro is to-the-right-of the mek. The mek is underneath the dask. The dask is to-the-left-of the xav. The clop has a blue button on top, a red button on side, and a yellow button on bottom. The wren has a yellow button on top and a blue button on bottom. The thorp has a yellow button on top and a blue button on bottom. The vro has a yellow button on top and a blue button on bottom. The mek has a yellow button on top and a blue button on front. The dask has a yellow button on top and a blue button on bottom. The xav has a yellow button on top and a blue button on side. Pressing the blue button on the clop activates it.\n\nPerception scenario: There are 7 objects on a shelf: a woz, a nurp, a greeble, a quib, a wix, a tunk, and a brall. The tunk is underneath the greeble. The greeble is to-the-left-of the woz. The woz is above the quib. The quib is to-the-right-of the wix. The wix is underneath the nurp. The nurp is to-the-left-of the brall. The woz has a yellow button on top and a yellow button on bottom. The nurp has a red button on top and a yellow button on bottom. The greeble has a red button on top, a blue button on side, and a yellow button on bottom. The quib has a red button on top and a red button on bottom. The wix has a yellow button on top and a red button on bottom. The tunk has a blue button on top, a red button on side, and a yellow button on bottom. The brall has a yellow button on top and a red button on bottom.\n\nWhich object in the perception scenario is the clop-analog, and which button activates it?",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a dask has a property: it can be activated by pressing the button at a specific position on it. Your job is to figure out which object in the perception scenario is the dask-analog, and therefore which button on it activates it.\n\nMemory scenario: There are 7 objects on a table: a clop, a wren, a thorp, a vro, a mek, a dask, and a xav. The clop is underneath the wren. The wren is to-the-left-of the thorp. The thorp is above the vro. The vro is to-the-right-of the mek. The mek is underneath the dask. The dask is to-the-left-of the xav. The clop has a purple button on top, a yellow button on side, and a orange button on bottom. The wren has a red button on top, a cyan button on side, and a black button on bottom. The thorp has a orange button on top, a purple button on side, and a yellow button on bottom. The vro has a cyan button on top, a black button on side, and a red button on bottom. The mek has a cyan button on top, a black button on side, and a red button on bottom. The dask has a blue button on top, a green button on side, and a pink button on bottom. The xav has a purple button on top, a orange button on side, and a yellow button on bottom. Pressing the button on the top of the dask activates it.\n\nPerception scenario: There are 7 objects on a shelf: a quib, a greeble, a brall, a wix, a nurp, a tunk, and a woz. The tunk is underneath the greeble. The greeble is to-the-left-of the woz. The woz is above the quib. The quib is to-the-right-of the wix. The wix is underneath the nurp. The nurp is to-the-left-of the brall. The quib has a cyan button on top, a red button on side, and a black button on bottom. The greeble has a black button on top, a red button on side, and a cyan button on bottom. The brall has a red button on top, a black button on side, and a cyan button on bottom. The wix has a blue button on top, a green button on side, and a pink button on bottom. The nurp has a yellow button on top, a purple button on side, and a orange button on bottom. The tunk has a red button on top, a cyan button on side, and a black button on bottom. The woz has a cyan button on top, a red button on side, and a black button on bottom.\n\nWhich object in the perception scenario is the dask-analog, and which button activates it? Answer as a fenced JSON block with keys `analog` and `button_color`.",
   "variant": "scale"
 }

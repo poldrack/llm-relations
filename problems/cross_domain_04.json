@@ -1,24 +1,41 @@
 {
   "correct_answer": {
     "analog": "glim",
-    "button_color": "purple"
+    "button_color": "brown"
   },
   "metadata": {
+    "activation_position": "top",
     "correct_slot_index": 1,
-    "domain": "vehicle_lot",
     "feature_distractor_slot": 0,
     "feature_match_answer": {
-      "analog": "jax",
-      "button_color": "purple"
+      "analog": "oxim",
+      "button_color": "cyan"
     },
+    "feature_twin_role": 2,
+    "filler_role": 1,
+    "memory_domain": "vehicle_lot",
+    "memory_slot_order": [
+      1,
+      0
+    ],
+    "memory_target_name": "klon",
     "n_objects": 3,
+    "perception_domain": "org_chart",
+    "perception_slot_order": [
+      0,
+      1
+    ],
     "positional_match_answer": {
-      "analog": "jax",
-      "button_color": "blue"
+      "analog": "oxim",
+      "button_color": "cyan"
     },
-    "seed": 4005
+    "seed": 4005,
+    "slot_orders_aligned": false,
+    "structural_correct_analog": "glim",
+    "structural_correct_button_color": "brown",
+    "target_role": 0
   },
   "problem_id": "cross_domain_04",
-  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel vehicle called a klon has a property: it can be activated by one of its colored panels. Your job is to figure out which vehicle in the perception scenario is the klon-analog, and therefore which colored panel on it can be activated.\n\nMemory scenario: There are three vehicles in a lot: a klon, a vro, and a yib. The klon is-parked-beneath the vro. The vro is-parked-to-the-left-of the yib. The klon has a purple colored panel on top, a blue colored panel on side, and a yellow colored panel on bottom. The vro has a blue colored panel on top and a purple colored panel on bottom. The yib has a yellow colored panel on top and a purple colored panel on side. Switching the purple panel on the klon activates it.\n\nPerception scenario: There are three vehicles in a lot: a jax, a glim, and a oxim. The glim is-parked-beneath the jax. The jax is-parked-to-the-left-of the oxim. The jax has a blue colored panel on top and a purple colored panel on side. The glim has a purple colored panel on top, a blue colored panel on side, and a yellow colored panel on bottom. The oxim has a yellow colored panel on top and a blue colored panel on bottom.\n\nWhich vehicle in the perception scenario is the klon-analog, and which colored panel activates it?",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel vehicle called a klon has a property: it can be activated by switching the panel at a specific position on it. Your job is to figure out which employee in the perception scenario is the klon-analog, and therefore which specialty on it activates it.\n\nMemory scenario: There are three vehicles in a lot: a klon, a vro, and a yib. The klon is-parked-to-the-left-of the vro. The vro is-stacked-below the yib. The klon has a cyan colored panel on top, a red colored panel on side, and a green colored panel on bottom. The vro has a orange colored panel on top, a black colored panel on side, and a yellow colored panel on bottom. The yib has a brown colored panel on top, a blue colored panel on side, and a purple colored panel on bottom. Switching the panel at the top of the klon activates it.\n\nPerception scenario: There are three employees in an organization: a oxim, a glim, and a jax. The glim reports-to the jax. The jax sits-beside the oxim. The oxim has a cyan color-coded specialty on top, a red color-coded specialty on side, and a green color-coded specialty on bottom. The glim has a brown color-coded specialty on top, a blue color-coded specialty on side, and a purple color-coded specialty on bottom. The jax has a yellow color-coded specialty on top, a black color-coded specialty on side, and a orange color-coded specialty on bottom.\n\nWhich employee in the perception scenario is the klon-analog, and which specialty activates it? Answer as a fenced JSON block with keys `analog` (the perception employee's name) and `button_color` (the color of the activating specialty on that employee).",
   "variant": "cross_domain"
 }

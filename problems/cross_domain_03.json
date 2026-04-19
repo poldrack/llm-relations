@@ -1,24 +1,41 @@
 {
   "correct_answer": {
-    "analog": "clop",
-    "button_color": "blue"
+    "analog": "bep",
+    "button_color": "yellow"
   },
   "metadata": {
+    "activation_position": "bottom",
     "correct_slot_index": 2,
-    "domain": "enclosure",
     "feature_distractor_slot": 1,
     "feature_match_answer": {
-      "analog": "fip",
-      "button_color": "blue"
+      "analog": "clop",
+      "button_color": "pink"
     },
+    "feature_twin_role": 0,
+    "filler_role": 1,
+    "memory_domain": "enclosure",
+    "memory_slot_order": [
+      1,
+      0
+    ],
+    "memory_target_name": "brall",
     "n_objects": 3,
+    "perception_domain": "vehicle_lot",
+    "perception_slot_order": [
+      0,
+      1
+    ],
     "positional_match_answer": {
-      "analog": "bep",
-      "button_color": "purple"
+      "analog": "fip",
+      "button_color": "orange"
     },
-    "seed": 4004
+    "seed": 4004,
+    "slot_orders_aligned": false,
+    "structural_correct_analog": "bep",
+    "structural_correct_button_color": "yellow",
+    "target_role": 2
   },
   "problem_id": "cross_domain_03",
-  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel animal called a wren has a property: it can be activated by one of its colored markings. Your job is to figure out which animal in the perception scenario is the wren-analog, and therefore which colored marking on it can be activated.\n\nMemory scenario: There are three animals in an enclosure: a wren, a vro, and a brall. The wren is-beneath the vro. The vro is-to-the-left-of the brall. The wren has a blue colored marking on top, a yellow colored marking on side, and a purple colored marking on bottom. The vro has a yellow colored marking on top and a blue colored marking on bottom. The brall has a purple colored marking on top and a blue colored marking on side. Touching the blue marking on the wren activates it.\n\nPerception scenario: There are three animals in an enclosure: a bep, a fip, and a clop. The clop is-beneath the fip. The fip is-to-the-left-of the bep. The bep has a purple colored marking on top and a yellow colored marking on bottom. The fip has a yellow colored marking on top and a blue colored marking on side. The clop has a blue colored marking on top, a yellow colored marking on side, and a purple colored marking on bottom.\n\nWhich animal in the perception scenario is the wren-analog, and which colored marking activates it?",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel animal called a brall has a property: it can be activated by touching the marking at a specific position on it. Your job is to figure out which vehicle in the perception scenario is the brall-analog, and therefore which panel on it activates it.\n\nMemory scenario: There are three animals in an enclosure: a wren, a vro, and a brall. The wren roams-beside the vro. The vro lies-beneath the brall. The wren has a orange colored marking on top, a purple colored marking on side, and a red colored marking on bottom. The vro has a brown colored marking on top, a yellow colored marking on side, and a black colored marking on bottom. The brall has a cyan colored marking on top, a blue colored marking on side, and a pink colored marking on bottom. Touching the marking at the bottom of the brall activates it.\n\nPerception scenario: There are three vehicles in a lot: a fip, a clop, and a bep. The clop is-stacked-below the fip. The fip is-parked-to-the-left-of the bep. The fip has a red colored panel on top, a purple colored panel on side, and a orange colored panel on bottom. The clop has a cyan colored panel on top, a blue colored panel on side, and a pink colored panel on bottom. The bep has a brown colored panel on top, a black colored panel on side, and a yellow colored panel on bottom.\n\nWhich vehicle in the perception scenario is the brall-analog, and which panel activates it? Answer as a fenced JSON block with keys `analog` (the perception vehicle's name) and `button_color` (the color of the activating panel on that vehicle).",
   "variant": "cross_domain"
 }

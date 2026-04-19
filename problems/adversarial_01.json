@@ -1,24 +1,40 @@
 {
   "correct_answer": {
-    "analog": "fro",
-    "button_color": "purple"
+    "analog": "wix",
+    "button_color": "green"
   },
   "metadata": {
+    "activation_position": "side",
     "correct_slot_index": 2,
     "decoy_index": 1,
     "feature_distractor_slot": 1,
     "feature_match_answer": {
-      "analog": "wix",
-      "button_color": "purple"
+      "analog": "fro",
+      "button_color": "cyan"
     },
+    "feature_twin_role": 0,
+    "filler_role": 2,
+    "memory_slot_order": [
+      0,
+      1
+    ],
+    "memory_target_name": "plon",
     "n_objects": 3,
+    "perception_slot_order": [
+      0,
+      1
+    ],
     "positional_match_answer": {
       "analog": "florp",
-      "button_color": "red"
+      "button_color": "orange"
     },
-    "seed": 5002
+    "seed": 5002,
+    "slot_orders_aligned": true,
+    "structural_correct_analog": "wix",
+    "structural_correct_button_color": "green",
+    "target_role": 1
   },
   "problem_id": "adversarial_01",
-  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a rast has a property: it can be activated by pressing one of its buttons. Your job is to figure out which object in the perception scenario is the rast-analog, and therefore which button on it can be activated.\n\nMemory scenario: There are three objects on a table: a rast, a plon, and a gox. The rast is underneath the plon. The plon is to-the-left-of the gox. The rast has a purple button on top, a yellow button on side, and a red button on bottom. The plon has a yellow button on top and a purple button on bottom. The gox has a red button on top and a purple button on side. Pressing the purple button on the rast activates it.\n\nPerception scenario: There are three objects on a shelf: a florp, a wix, and a fro. The fro is underneath the wix. The wix is to-the-left-of the florp. The florp has a red button on top and a yellow button on bottom. The wix has a purple button on top, a purple button on side, and a yellow button on bottom. The fro has a purple button on top, a yellow button on side, and a red button on bottom. The wix's purple button is described in the catalog as its primary control.\n\nWhich object in the perception scenario is the rast-analog, and which button activates it?",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a plon has a property: it can be activated by pressing the button at a specific position on it. Your job is to figure out which object in the perception scenario is the plon-analog, and therefore which button on it activates it.\n\nMemory scenario: There are three objects on a table: a rast, a plon, and a gox. The rast is underneath the plon. The plon is to-the-left-of the gox. The rast has a green button on top, a blue button on side, and a purple button on bottom. The plon has a pink button on top, a cyan button on side, and a brown button on bottom. The gox has a yellow button on top, a orange button on side, and a red button on bottom. Pressing the button on the side of the plon activates it.\n\nPerception scenario: There are three objects on a shelf: a florp, a fro, and a wix. The fro is underneath the wix. The wix is to-the-left-of the florp. The florp has a yellow button on top, a orange button on side, and a red button on bottom. The fro has a pink button on top, a cyan button on side, and a brown button on bottom. The wix has a purple button on top, a green button on side, and a blue button on bottom. The fro's cyan button is described in the catalog as its primary control.\n\nWhich object in the perception scenario is the plon-analog, and which button activates it? Answer as a fenced JSON block with keys `analog` (the perception object's name) and `button_color` (the color of the activating button on that object).",
   "variant": "adversarial"
 }

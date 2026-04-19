@@ -260,8 +260,23 @@ def run_benchmark(
     model_specs: list[ModelSpec],
     n_samples: int,
     use_cot: bool = True,
+    variants: Optional[list[str]] = None,
 ) -> None:
     problems = [load_problem(f) for f in sorted(problems_dir.glob("*.json"))]
+    if variants is not None:
+        requested = set(variants)
+        available = {p.variant for p in problems}
+        unknown = requested - available
+        if unknown:
+            raise ValueError(
+                f"Unknown variant(s): {sorted(unknown)}. "
+                f"Available variants in {problems_dir}: {sorted(available)}"
+            )
+        problems = [p for p in problems if p.variant in requested]
+        if not problems:
+            raise ValueError(
+                f"No problems matched variants={sorted(requested)} in {problems_dir}"
+            )
     system_prompt = build_system_prompt(use_cot=use_cot)
     prompt_variant = "cot" if use_cot else "no_cot"
     records: list[SampleRecord] = []

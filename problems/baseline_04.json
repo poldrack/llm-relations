@@ -1,23 +1,39 @@
 {
   "correct_answer": {
-    "analog": "jorp",
-    "button_color": "purple"
+    "analog": "lurn",
+    "button_color": "red"
   },
   "metadata": {
+    "activation_position": "top",
     "correct_slot_index": 1,
     "feature_distractor_slot": 0,
     "feature_match_answer": {
-      "analog": "lurn",
+      "analog": "jorp",
       "button_color": "purple"
     },
+    "feature_twin_role": 0,
+    "filler_role": 2,
+    "memory_slot_order": [
+      0,
+      1
+    ],
+    "memory_target_name": "bep",
     "n_objects": 3,
+    "perception_slot_order": [
+      0,
+      1
+    ],
     "positional_match_answer": {
-      "analog": "lurn",
-      "button_color": "green"
+      "analog": "jorp",
+      "button_color": "purple"
     },
-    "seed": 1005
+    "seed": 1005,
+    "slot_orders_aligned": true,
+    "structural_correct_analog": "lurn",
+    "structural_correct_button_color": "red",
+    "target_role": 1
   },
   "problem_id": "baseline_04",
-  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a wren has a property: it can be activated by pressing one of its buttons. Your job is to figure out which object in the perception scenario is the wren-analog, and therefore which button on it can be activated.\n\nMemory scenario: There are three objects on a table: a wren, a bep, and a ikk. The wren is underneath the bep. The bep is to-the-left-of the ikk. The wren has a purple button on top, a green button on side, and a red button on bottom. The bep has a green button on top and a purple button on bottom. The ikk has a red button on top and a purple button on side. Pressing the purple button on the wren activates it.\n\nPerception scenario: There are three objects on a shelf: a lurn, a jorp, and a skiv. The jorp is underneath the lurn. The lurn is to-the-left-of the skiv. The lurn has a green button on top and a purple button on side. The jorp has a purple button on top, a green button on side, and a red button on bottom. The skiv has a red button on top and a green button on bottom.\n\nWhich object in the perception scenario is the wren-analog, and which button activates it?",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a bep has a property: it can be activated by pressing the button at a specific position on it. Your job is to figure out which object in the perception scenario is the bep-analog, and therefore which button on it activates it.\n\nMemory scenario: There are three objects on a table: a wren, a bep, and a ikk. The wren is underneath the bep. The bep is to-the-left-of the ikk. The wren has a red button on top, a brown button on side, and a black button on bottom. The bep has a purple button on top, a cyan button on side, and a orange button on bottom. The ikk has a pink button on top, a yellow button on side, and a blue button on bottom. Pressing the button on the top of the bep activates it.\n\nPerception scenario: There are three objects on a shelf: a jorp, a lurn, and a skiv. The jorp is underneath the lurn. The lurn is to-the-left-of the skiv. The jorp has a purple button on top, a cyan button on side, and a orange button on bottom. The lurn has a red button on top, a black button on side, and a brown button on bottom. The skiv has a pink button on top, a blue button on side, and a yellow button on bottom.\n\nWhich object in the perception scenario is the bep-analog, and which button activates it? Answer as a fenced JSON block with keys `analog` (the perception object's name) and `button_color` (the color of the activating button on that object).",
   "variant": "baseline"
 }

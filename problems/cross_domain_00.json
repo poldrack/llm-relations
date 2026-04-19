@@ -1,24 +1,41 @@
 {
   "correct_answer": {
     "analog": "trob",
-    "button_color": "yellow"
+    "button_color": "purple"
   },
   "metadata": {
+    "activation_position": "bottom",
     "correct_slot_index": 2,
-    "domain": "org_chart",
     "feature_distractor_slot": 0,
     "feature_match_answer": {
       "analog": "snig",
-      "button_color": "yellow"
+      "button_color": "brown"
     },
+    "feature_twin_role": 1,
+    "filler_role": 2,
+    "memory_domain": "org_chart",
+    "memory_slot_order": [
+      0,
+      1
+    ],
+    "memory_target_name": "skiv",
     "n_objects": 3,
+    "perception_domain": "garden",
+    "perception_slot_order": [
+      1,
+      0
+    ],
     "positional_match_answer": {
       "analog": "snig",
-      "button_color": "purple"
+      "button_color": "brown"
     },
-    "seed": 4001
+    "seed": 4001,
+    "slot_orders_aligned": false,
+    "structural_correct_analog": "trob",
+    "structural_correct_button_color": "purple",
+    "target_role": 0
   },
   "problem_id": "cross_domain_00",
-  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel employee called a skiv has a property: it can be activated by one of its color-coded specialtys. Your job is to figure out which employee in the perception scenario is the skiv-analog, and therefore which color-coded specialty on it can be activated.\n\nMemory scenario: There are three employees in an organization: a skiv, a tunk, and a drog. The skiv reports-to the tunk. The tunk sits-beside the drog. The skiv has a yellow color-coded specialty on top, a purple color-coded specialty on side, and a green color-coded specialty on bottom. The tunk has a purple color-coded specialty on top and a yellow color-coded specialty on bottom. The drog has a green color-coded specialty on top and a yellow color-coded specialty on side. Assigning the yellow specialty to the skiv activates it.\n\nPerception scenario: There are three employees in an organization: a snig, a clop, and a trob. The trob reports-to the snig. The snig sits-beside the clop. The snig has a purple color-coded specialty on top and a yellow color-coded specialty on side. The clop has a green color-coded specialty on top and a purple color-coded specialty on bottom. The trob has a yellow color-coded specialty on top, a purple color-coded specialty on side, and a green color-coded specialty on bottom.\n\nWhich employee in the perception scenario is the skiv-analog, and which color-coded specialty activates it?",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel employee called a skiv has a property: it can be activated by assigning the specialty at a specific position on it. Your job is to figure out which plant in the perception scenario is the skiv-analog, and therefore which leaf on it activates it.\n\nMemory scenario: There are three employees in an organization: a skiv, a tunk, and a drog. The skiv reports-to the tunk. The tunk sits-beside the drog. The skiv has a yellow color-coded specialty on top, a cyan color-coded specialty on side, and a brown color-coded specialty on bottom. The tunk has a orange color-coded specialty on top, a red color-coded specialty on side, and a black color-coded specialty on bottom. The drog has a green color-coded specialty on top, a purple color-coded specialty on side, and a pink color-coded specialty on bottom. Assigning the specialty at the bottom position of the skiv activates it.\n\nPerception scenario: There are three plants in a garden: a snig, a clop, and a trob. The trob grows-beside the snig. The snig is-growing-under the clop. The snig has a yellow colored leaf on top, a cyan colored leaf on side, and a brown colored leaf on bottom. The clop has a orange colored leaf on top, a red colored leaf on side, and a black colored leaf on bottom. The trob has a green colored leaf on top, a pink colored leaf on side, and a purple colored leaf on bottom.\n\nWhich plant in the perception scenario is the skiv-analog, and which leaf activates it? Answer as a fenced JSON block with keys `analog` (the perception plant's name) and `button_color` (the color of the activating leaf on that plant).",
   "variant": "cross_domain"
 }

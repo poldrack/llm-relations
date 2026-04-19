@@ -1,13 +1,16 @@
 {
   "correct_answer": {
-    "analog": "emp",
-    "button_color": "yellow"
+    "analog": "greeble",
+    "button_color": "black"
   },
   "metadata": {
+    "activation_position": "side",
     "feature_match_answer": {
-      "analog": "klon",
-      "button_color": "yellow"
+      "analog": "woz",
+      "button_color": "brown"
     },
+    "feature_twin_role": 3,
+    "memory_target_name": "dask",
     "memory_words": [
       "xav",
       "zop",
@@ -20,14 +23,14 @@
     ],
     "n_objects": 8,
     "perception_list_order": [
+      "jax",
+      "trob",
       "lurn",
       "klon",
       "emp",
-      "woz",
-      "trob",
       "brall",
-      "jax",
-      "greeble"
+      "greeble",
+      "woz"
     ],
     "perception_words": [
       "emp",
@@ -40,12 +43,15 @@
       "jax"
     ],
     "positional_match_answer": {
-      "analog": "lurn",
-      "button_color": "green"
+      "analog": "jax",
+      "button_color": "red"
     },
-    "seed": 3005
+    "seed": 3005,
+    "structural_correct_analog": "greeble",
+    "structural_correct_button_color": "black",
+    "target_role": 2
   },
   "problem_id": "scale_04",
-  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a xav has a property: it can be activated by pressing one of its buttons. Your job is to figure out which object in the perception scenario is the xav-analog, and therefore which button on it can be activated.\n\nMemory scenario: There are 8 objects on a table: a xav, a zop, a dask, a jorp, a zink, a clop, a thorp, and a quib. The xav is underneath the zop. The zop is to-the-left-of the dask. The dask is above the jorp. The jorp is to-the-right-of the zink. The zink is underneath the clop. The clop is to-the-left-of the thorp. The thorp is above the quib. The xav has a yellow button on top, a red button on side, and a green button on bottom. The zop has a red button on top and a yellow button on back. The dask has a green button on top and a yellow button on back. The jorp has a red button on top and a yellow button on back. The zink has a red button on top and a yellow button on front. The clop has a green button on top and a yellow button on front. The thorp has a red button on top and a yellow button on bottom. The quib has a green button on top and a yellow button on front. Pressing the yellow button on the xav activates it.\n\nPerception scenario: There are 8 objects on a shelf: a lurn, a klon, a emp, a woz, a trob, a brall, a jax, and a greeble. The emp is underneath the klon. The klon is to-the-left-of the greeble. The greeble is above the woz. The woz is to-the-right-of the lurn. The lurn is underneath the brall. The brall is to-the-left-of the trob. The trob is above the jax. The lurn has a green button on top and a green button on bottom. The klon has a red button on top, a yellow button on side, and a green button on bottom. The emp has a yellow button on top, a red button on side, and a green button on bottom. The woz has a green button on top and a red button on bottom. The trob has a green button on top and a red button on bottom. The brall has a green button on top and a red button on bottom. The jax has a red button on top and a red button on bottom. The greeble has a green button on top and a green button on bottom.\n\nWhich object in the perception scenario is the xav-analog, and which button activates it?",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a dask has a property: it can be activated by pressing the button at a specific position on it. Your job is to figure out which object in the perception scenario is the dask-analog, and therefore which button on it activates it.\n\nMemory scenario: There are 8 objects on a table: a xav, a zop, a dask, a jorp, a zink, a clop, a thorp, and a quib. The xav is underneath the zop. The zop is to-the-left-of the dask. The dask is above the jorp. The jorp is to-the-right-of the zink. The zink is underneath the clop. The clop is to-the-left-of the thorp. The thorp is above the quib. The xav has a pink button on top, a black button on side, and a orange button on bottom. The zop has a black button on top, a pink button on side, and a orange button on bottom. The dask has a blue button on top, a brown button on side, and a yellow button on bottom. The jorp has a orange button on top, a black button on side, and a pink button on bottom. The zink has a red button on top, a purple button on side, and a cyan button on bottom. The clop has a purple button on top, a red button on side, and a cyan button on bottom. The thorp has a purple button on top, a cyan button on side, and a red button on bottom. The quib has a pink button on top, a orange button on side, and a black button on bottom. Pressing the button on the side of the dask activates it.\n\nPerception scenario: There are 8 objects on a shelf: a jax, a trob, a lurn, a klon, a emp, a brall, a greeble, and a woz. The emp is underneath the klon. The klon is to-the-left-of the greeble. The greeble is above the woz. The woz is to-the-right-of the lurn. The lurn is underneath the brall. The brall is to-the-left-of the trob. The trob is above the jax. The jax has a purple button on top, a red button on side, and a cyan button on bottom. The trob has a purple button on top, a red button on side, and a cyan button on bottom. The lurn has a purple button on top, a cyan button on side, and a red button on bottom. The klon has a purple button on top, a red button on side, and a cyan button on bottom. The emp has a cyan button on top, a red button on side, and a purple button on bottom. The brall has a cyan button on top, a purple button on side, and a red button on bottom. The greeble has a pink button on top, a black button on side, and a orange button on bottom. The woz has a blue button on top, a brown button on side, and a yellow button on bottom.\n\nWhich object in the perception scenario is the dask-analog, and which button activates it? Answer as a fenced JSON block with keys `analog` and `button_color`.",
   "variant": "scale"
 }

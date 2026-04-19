@@ -1,23 +1,39 @@
 {
   "correct_answer": {
-    "analog": "glim",
-    "button_color": "green"
+    "analog": "drog",
+    "button_color": "orange"
   },
   "metadata": {
+    "activation_position": "top",
     "correct_slot_index": 2,
     "feature_distractor_slot": 0,
     "feature_match_answer": {
-      "analog": "pell",
-      "button_color": "green"
+      "analog": "glim",
+      "button_color": "brown"
     },
+    "feature_twin_role": 0,
+    "filler_role": 1,
+    "memory_slot_order": [
+      0,
+      1
+    ],
+    "memory_target_name": "skiv",
     "n_objects": 3,
+    "perception_slot_order": [
+      0,
+      1
+    ],
     "positional_match_answer": {
-      "analog": "pell",
-      "button_color": "yellow"
+      "analog": "glim",
+      "button_color": "brown"
     },
-    "seed": 1002
+    "seed": 1002,
+    "slot_orders_aligned": true,
+    "structural_correct_analog": "drog",
+    "structural_correct_button_color": "orange",
+    "target_role": 2
   },
   "problem_id": "baseline_01",
-  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a hask has a property: it can be activated by pressing one of its buttons. Your job is to figure out which object in the perception scenario is the hask-analog, and therefore which button on it can be activated.\n\nMemory scenario: There are three objects on a table: a hask, a prit, and a skiv. The hask is underneath the prit. The prit is to-the-left-of the skiv. The hask has a green button on top, a yellow button on side, and a blue button on bottom. The prit has a yellow button on top and a green button on bottom. The skiv has a blue button on top and a green button on side. Pressing the green button on the hask activates it.\n\nPerception scenario: There are three objects on a shelf: a pell, a drog, and a glim. The glim is underneath the pell. The pell is to-the-left-of the drog. The pell has a yellow button on top and a green button on side. The drog has a blue button on top and a yellow button on bottom. The glim has a green button on top, a yellow button on side, and a blue button on bottom.\n\nWhich object in the perception scenario is the hask-analog, and which button activates it?",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a skiv has a property: it can be activated by pressing the button at a specific position on it. Your job is to figure out which object in the perception scenario is the skiv-analog, and therefore which button on it activates it.\n\nMemory scenario: There are three objects on a table: a hask, a prit, and a skiv. The hask is underneath the prit. The prit is to-the-left-of the skiv. The hask has a cyan button on top, a pink button on side, and a orange button on bottom. The prit has a black button on top, a blue button on side, and a red button on bottom. The skiv has a brown button on top, a green button on side, and a purple button on bottom. Pressing the button on the top of the skiv activates it.\n\nPerception scenario: There are three objects on a shelf: a glim, a pell, and a drog. The glim is underneath the pell. The pell is to-the-left-of the drog. The glim has a brown button on top, a green button on side, and a purple button on bottom. The pell has a blue button on top, a black button on side, and a red button on bottom. The drog has a orange button on top, a pink button on side, and a cyan button on bottom.\n\nWhich object in the perception scenario is the skiv-analog, and which button activates it? Answer as a fenced JSON block with keys `analog` (the perception object's name) and `button_color` (the color of the activating button on that object).",
   "variant": "baseline"
 }

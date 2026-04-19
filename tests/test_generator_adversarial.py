@@ -4,11 +4,10 @@ from llm_relations.generator.adversarial import generate_adversarial, LINGUISTIC
 def test_adversarial_has_linguistic_decoy_sentence():
     p = generate_adversarial(seed=1, index=0, correct_slot_index=1, feature_distractor_slot=0, decoy_index=0)
     distractor = p.metadata["feature_match_answer"]["analog"]
-    color = p.correct_answer["button_color"]
-    # At least one of the known decoy templates should appear in the prompt,
-    # instantiated for the distractor.
+    # The decoy uses the feature-twin's own activation-position button color.
+    twin_color = p.metadata["feature_match_answer"]["button_color"]
     assert any(
-        template.format(name=distractor, color=color) in p.prompt_text
+        template.format(name=distractor, color=twin_color) in p.prompt_text
         for template in LINGUISTIC_DECOYS
     )
 

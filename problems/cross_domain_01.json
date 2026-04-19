@@ -1,24 +1,41 @@
 {
   "correct_answer": {
-    "analog": "trob",
-    "button_color": "blue"
+    "analog": "corp",
+    "button_color": "purple"
   },
   "metadata": {
+    "activation_position": "top",
     "correct_slot_index": 1,
-    "domain": "garden",
     "feature_distractor_slot": 2,
     "feature_match_answer": {
       "analog": "nop",
-      "button_color": "blue"
+      "button_color": "red"
     },
+    "feature_twin_role": 1,
+    "filler_role": 0,
+    "memory_domain": "garden",
+    "memory_slot_order": [
+      0,
+      1
+    ],
+    "memory_target_name": "vro",
     "n_objects": 3,
+    "perception_domain": "building",
+    "perception_slot_order": [
+      1,
+      0
+    ],
     "positional_match_answer": {
-      "analog": "corp",
-      "button_color": "yellow"
+      "analog": "trob",
+      "button_color": "cyan"
     },
-    "seed": 4002
+    "seed": 4002,
+    "slot_orders_aligned": false,
+    "structural_correct_analog": "corp",
+    "structural_correct_button_color": "purple",
+    "target_role": 2
   },
   "problem_id": "cross_domain_01",
-  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel plant called a jax has a property: it can be activated by one of its colored leafs. Your job is to figure out which plant in the perception scenario is the jax-analog, and therefore which colored leaf on it can be activated.\n\nMemory scenario: There are three plants in a garden: a jax, a scob, and a vro. The jax is-growing-under the scob. The scob is-to-the-left-of the vro. The jax has a blue colored leaf on top, a purple colored leaf on side, and a yellow colored leaf on bottom. The scob has a purple colored leaf on top and a blue colored leaf on bottom. The vro has a yellow colored leaf on top and a blue colored leaf on side. Clipping the blue leaf from the jax activates it.\n\nPerception scenario: There are three plants in a garden: a corp, a trob, and a nop. The trob is-growing-under the nop. The nop is-to-the-left-of the corp. The corp has a yellow colored leaf on top and a purple colored leaf on bottom. The trob has a blue colored leaf on top, a purple colored leaf on side, and a yellow colored leaf on bottom. The nop has a purple colored leaf on top and a blue colored leaf on side.\n\nWhich plant in the perception scenario is the jax-analog, and which colored leaf activates it?",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel plant called a vro has a property: it can be activated by clipping the leaf at a specific position on it. Your job is to figure out which room in the perception scenario is the vro-analog, and therefore which fixture on it activates it.\n\nMemory scenario: There are three plants in a garden: a jax, a scob, and a vro. The jax is-growing-under the scob. The scob grows-beside the vro. The jax has a cyan colored leaf on top, a orange colored leaf on side, and a green colored leaf on bottom. The scob has a pink colored leaf on top, a black colored leaf on side, and a purple colored leaf on bottom. The vro has a red colored leaf on top, a blue colored leaf on side, and a yellow colored leaf on bottom. Clipping the leaf at the top of the vro activates it.\n\nPerception scenario: There are three rooms in a building: a trob, a corp, and a nop. The trob is-adjacent-to the nop. The nop is-directly-below the corp. The trob has a cyan colored fixture on top, a orange colored fixture on side, and a green colored fixture on bottom. The corp has a purple colored fixture on top, a pink colored fixture on side, and a black colored fixture on bottom. The nop has a red colored fixture on top, a blue colored fixture on side, and a yellow colored fixture on bottom.\n\nWhich room in the perception scenario is the vro-analog, and which fixture activates it? Answer as a fenced JSON block with keys `analog` (the perception room's name) and `button_color` (the color of the activating fixture on that room).",
   "variant": "cross_domain"
 }

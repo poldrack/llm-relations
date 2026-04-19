@@ -4,21 +4,38 @@
     "button_color": "blue"
   },
   "metadata": {
+    "activation_position": "top",
     "correct_slot_index": 2,
-    "domain": "building",
     "feature_distractor_slot": 1,
     "feature_match_answer": {
-      "analog": "drog",
-      "button_color": "blue"
-    },
-    "n_objects": 3,
-    "positional_match_answer": {
       "analog": "zop",
-      "button_color": "red"
+      "button_color": "purple"
     },
-    "seed": 4003
+    "feature_twin_role": 2,
+    "filler_role": 1,
+    "memory_domain": "building",
+    "memory_slot_order": [
+      0,
+      1
+    ],
+    "memory_target_name": "ulmp",
+    "n_objects": 3,
+    "perception_domain": "enclosure",
+    "perception_slot_order": [
+      1,
+      0
+    ],
+    "positional_match_answer": {
+      "analog": "drog",
+      "button_color": "green"
+    },
+    "seed": 4003,
+    "slot_orders_aligned": false,
+    "structural_correct_analog": "glim",
+    "structural_correct_button_color": "blue",
+    "target_role": 0
   },
   "problem_id": "cross_domain_02",
-  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel room called a ulmp has a property: it can be activated by one of its colored fixtures. Your job is to figure out which room in the perception scenario is the ulmp-analog, and therefore which colored fixture on it can be activated.\n\nMemory scenario: There are three rooms in a building: a ulmp, a rask, and a dask. The ulmp is-directly-below the rask. The rask is-adjacent-to the dask. The ulmp has a blue colored fixture on top, a green colored fixture on side, and a red colored fixture on bottom. The rask has a green colored fixture on top and a blue colored fixture on bottom. The dask has a red colored fixture on top and a blue colored fixture on side. Operating the blue fixture in the ulmp activates it.\n\nPerception scenario: There are three rooms in a building: a zop, a drog, and a glim. The glim is-directly-below the drog. The drog is-adjacent-to the zop. The zop has a red colored fixture on top and a green colored fixture on bottom. The drog has a green colored fixture on top and a blue colored fixture on side. The glim has a blue colored fixture on top, a green colored fixture on side, and a red colored fixture on bottom.\n\nWhich room in the perception scenario is the ulmp-analog, and which colored fixture activates it?",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel room called a ulmp has a property: it can be activated by operating the fixture at a specific position on it. Your job is to figure out which animal in the perception scenario is the ulmp-analog, and therefore which marking on it activates it.\n\nMemory scenario: There are three rooms in a building: a ulmp, a rask, and a dask. The ulmp is-directly-below the rask. The rask is-adjacent-to the dask. The ulmp has a purple colored fixture on top, a black colored fixture on side, and a red colored fixture on bottom. The rask has a cyan colored fixture on top, a blue colored fixture on side, and a yellow colored fixture on bottom. The dask has a orange colored fixture on top, a green colored fixture on side, and a brown colored fixture on bottom. Operating the fixture at the top of the ulmp activates it.\n\nPerception scenario: There are three animals in an enclosure: a drog, a zop, and a glim. The glim roams-beside the drog. The drog lies-beneath the zop. The drog has a green colored marking on top, a brown colored marking on side, and a orange colored marking on bottom. The zop has a purple colored marking on top, a black colored marking on side, and a red colored marking on bottom. The glim has a blue colored marking on top, a yellow colored marking on side, and a cyan colored marking on bottom.\n\nWhich animal in the perception scenario is the ulmp-analog, and which marking activates it? Answer as a fenced JSON block with keys `analog` (the perception animal's name) and `button_color` (the color of the activating marking on that animal).",
   "variant": "cross_domain"
 }

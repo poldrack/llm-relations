@@ -1,24 +1,40 @@
 {
   "correct_answer": {
-    "analog": "trob",
+    "analog": "yib",
     "button_color": "purple"
   },
   "metadata": {
+    "activation_position": "bottom",
     "correct_slot_index": 1,
     "decoy_index": 0,
     "feature_distractor_slot": 0,
     "feature_match_answer": {
-      "analog": "yib",
-      "button_color": "purple"
+      "analog": "arn",
+      "button_color": "red"
     },
+    "feature_twin_role": 2,
+    "filler_role": 0,
+    "memory_slot_order": [
+      0,
+      1
+    ],
+    "memory_target_name": "vask",
     "n_objects": 3,
+    "perception_slot_order": [
+      0,
+      1
+    ],
     "positional_match_answer": {
-      "analog": "yib",
-      "button_color": "purple"
+      "analog": "arn",
+      "button_color": "red"
     },
-    "seed": 5001
+    "seed": 5001,
+    "slot_orders_aligned": true,
+    "structural_correct_analog": "yib",
+    "structural_correct_button_color": "purple",
+    "target_role": 1
   },
   "problem_id": "adversarial_00",
-  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a nurp has a property: it can be activated by pressing one of its buttons. Your job is to figure out which object in the perception scenario is the nurp-analog, and therefore which button on it can be activated.\n\nMemory scenario: There are three objects on a table: a nurp, a vask, and a rast. The nurp is underneath the vask. The vask is to-the-left-of the rast. The nurp has a purple button on top, a blue button on side, and a yellow button on bottom. The vask has a blue button on top and a purple button on bottom. The rast has a yellow button on top and a purple button on side. Pressing the purple button on the nurp activates it.\n\nPerception scenario: There are three objects on a shelf: a yib, a trob, and a arn. The trob is underneath the yib. The yib is to-the-left-of the arn. The yib has a purple button on top, a purple button on side, and a blue button on bottom. The trob has a purple button on top, a blue button on side, and a yellow button on bottom. The arn has a yellow button on top and a blue button on bottom. Notably, the yib's purple button glows softly when anyone walks by.\n\nWhich object in the perception scenario is the nurp-analog, and which button activates it?",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a vask has a property: it can be activated by pressing the button at a specific position on it. Your job is to figure out which object in the perception scenario is the vask-analog, and therefore which button on it activates it.\n\nMemory scenario: There are three objects on a table: a nurp, a vask, and a rast. The nurp is underneath the vask. The vask is to-the-left-of the rast. The nurp has a purple button on top, a blue button on side, and a brown button on bottom. The vask has a black button on top, a cyan button on side, and a red button on bottom. The rast has a orange button on top, a yellow button on side, and a green button on bottom. Pressing the button on the bottom of the vask activates it.\n\nPerception scenario: There are three objects on a shelf: a arn, a yib, and a trob. The trob is underneath the yib. The yib is to-the-left-of the arn. The arn has a black button on top, a cyan button on side, and a red button on bottom. The yib has a brown button on top, a blue button on side, and a purple button on bottom. The trob has a yellow button on top, a orange button on side, and a green button on bottom. Notably, the arn's red button glows softly when anyone walks by.\n\nWhich object in the perception scenario is the vask-analog, and which button activates it? Answer as a fenced JSON block with keys `analog` (the perception object's name) and `button_color` (the color of the activating button on that object).",
   "variant": "adversarial"
 }

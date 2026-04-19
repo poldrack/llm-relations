@@ -1,13 +1,16 @@
 {
   "correct_answer": {
-    "analog": "nurp",
-    "button_color": "green"
+    "analog": "brall",
+    "button_color": "cyan"
   },
   "metadata": {
+    "activation_position": "top",
     "feature_match_answer": {
       "analog": "zop",
-      "button_color": "green"
+      "button_color": "blue"
     },
+    "feature_twin_role": 1,
+    "memory_target_name": "twix",
     "memory_words": [
       "moob",
       "nop",
@@ -19,10 +22,10 @@
     "n_objects": 6,
     "perception_list_order": [
       "dask",
-      "nurp",
-      "zant",
       "ikk",
       "brall",
+      "nurp",
+      "zant",
       "zop"
     ],
     "perception_words": [
@@ -35,11 +38,14 @@
     ],
     "positional_match_answer": {
       "analog": "dask",
-      "button_color": "blue"
+      "button_color": "brown"
     },
-    "seed": 3003
+    "seed": 3003,
+    "structural_correct_analog": "brall",
+    "structural_correct_button_color": "cyan",
+    "target_role": 5
   },
   "problem_id": "scale_02",
-  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a moob has a property: it can be activated by pressing one of its buttons. Your job is to figure out which object in the perception scenario is the moob-analog, and therefore which button on it can be activated.\n\nMemory scenario: There are 6 objects on a table: a moob, a nop, a xav, a rask, a tunk, and a twix. The moob is underneath the nop. The nop is to-the-left-of the xav. The xav is above the rask. The rask is to-the-right-of the tunk. The tunk is underneath the twix. The moob has a green button on top, a blue button on side, and a yellow button on bottom. The nop has a blue button on top and a green button on side. The xav has a blue button on top and a green button on bottom. The rask has a blue button on top and a green button on bottom. The tunk has a blue button on top and a green button on bottom. The twix has a yellow button on top and a green button on back. Pressing the green button on the moob activates it.\n\nPerception scenario: There are 6 objects on a shelf: a dask, a nurp, a zant, a ikk, a brall, and a zop. The nurp is underneath the zop. The zop is to-the-left-of the zant. The zant is above the ikk. The ikk is to-the-right-of the dask. The dask is underneath the brall. The dask has a blue button on top and a yellow button on bottom. The nurp has a green button on top, a blue button on side, and a yellow button on bottom. The zant has a blue button on top and a yellow button on bottom. The ikk has a blue button on top and a blue button on bottom. The brall has a yellow button on top and a blue button on bottom. The zop has a blue button on top, a green button on side, and a yellow button on bottom.\n\nWhich object in the perception scenario is the moob-analog, and which button activates it?",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a twix has a property: it can be activated by pressing the button at a specific position on it. Your job is to figure out which object in the perception scenario is the twix-analog, and therefore which button on it activates it.\n\nMemory scenario: There are 6 objects on a table: a moob, a nop, a xav, a rask, a tunk, and a twix. The moob is underneath the nop. The nop is to-the-left-of the xav. The xav is above the rask. The rask is to-the-right-of the tunk. The tunk is underneath the twix. The moob has a purple button on top, a cyan button on side, and a red button on bottom. The nop has a purple button on top, a cyan button on side, and a red button on bottom. The xav has a pink button on top, a brown button on side, and a green button on bottom. The rask has a cyan button on top, a purple button on side, and a red button on bottom. The tunk has a brown button on top, a pink button on side, and a green button on bottom. The twix has a blue button on top, a black button on side, and a orange button on bottom. Pressing the button on the top of the twix activates it.\n\nPerception scenario: There are 6 objects on a shelf: a dask, a ikk, a brall, a nurp, a zant, and a zop. The nurp is underneath the zop. The zop is to-the-left-of the zant. The zant is above the ikk. The ikk is to-the-right-of the dask. The dask is underneath the brall. The dask has a brown button on top, a green button on side, and a pink button on bottom. The ikk has a pink button on top, a green button on side, and a brown button on bottom. The brall has a cyan button on top, a purple button on side, and a red button on bottom. The nurp has a brown button on top, a pink button on side, and a green button on bottom. The zant has a pink button on top, a brown button on side, and a green button on bottom. The zop has a blue button on top, a black button on side, and a orange button on bottom.\n\nWhich object in the perception scenario is the twix-analog, and which button activates it? Answer as a fenced JSON block with keys `analog` and `button_color`.",
   "variant": "scale"
 }

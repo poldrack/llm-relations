@@ -1,23 +1,39 @@
 {
   "correct_answer": {
-    "analog": "vro",
+    "analog": "glim",
     "button_color": "green"
   },
   "metadata": {
+    "activation_position": "bottom",
     "correct_slot_index": 1,
     "feature_distractor_slot": 2,
     "feature_match_answer": {
-      "analog": "glim",
-      "button_color": "green"
+      "analog": "vro",
+      "button_color": "pink"
     },
+    "feature_twin_role": 0,
+    "filler_role": 2,
+    "memory_slot_order": [
+      0,
+      1
+    ],
+    "memory_target_name": "woz",
     "n_objects": 3,
+    "perception_slot_order": [
+      0,
+      1
+    ],
     "positional_match_answer": {
       "analog": "vask",
-      "button_color": "purple"
+      "button_color": "blue"
     },
-    "seed": 2003
+    "seed": 2003,
+    "slot_orders_aligned": true,
+    "structural_correct_analog": "glim",
+    "structural_correct_button_color": "green",
+    "target_role": 1
   },
   "problem_id": "feature_misleading_02",
-  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a blix has a property: it can be activated by pressing one of its buttons. Your job is to figure out which object in the perception scenario is the blix-analog, and therefore which button on it can be activated.\n\nMemory scenario: There are three objects on a table: a blix, a woz, and a moob. The blix is underneath the woz. The woz is to-the-left-of the moob. The blix has a green button on top, a yellow button on side, and a purple button on bottom. The woz has a yellow button on top and a green button on bottom. The moob has a purple button on top and a green button on side. Pressing the green button on the blix activates it.\n\nPerception scenario: There are three objects on a shelf: a vask, a vro, and a glim. The vro is underneath the glim. The glim is to-the-left-of the vask. The vask has a purple button on top and a yellow button on bottom. The vro has a green button on top, a yellow button on side, and a purple button on bottom. The glim has a green button on top, a green button on side, and a yellow button on bottom.\n\nWhich object in the perception scenario is the blix-analog, and which button activates it?",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a woz has a property: it can be activated by pressing the button at a specific position on it. Your job is to figure out which object in the perception scenario is the woz-analog, and therefore which button on it activates it.\n\nMemory scenario: There are three objects on a table: a blix, a woz, and a moob. The blix is underneath the woz. The woz is to-the-left-of the moob. The blix has a brown button on top, a green button on side, and a orange button on bottom. The woz has a purple button on top, a red button on side, and a pink button on bottom. The moob has a cyan button on top, a black button on side, and a blue button on bottom. Pressing the button on the bottom of the woz activates it.\n\nPerception scenario: There are three objects on a shelf: a vask, a glim, and a vro. The vro is underneath the glim. The glim is to-the-left-of the vask. The vask has a cyan button on top, a black button on side, and a blue button on bottom. The glim has a orange button on top, a brown button on side, and a green button on bottom. The vro has a purple button on top, a red button on side, and a pink button on bottom. The vro's buttons are arranged in the same layout as a typical object.\n\nWhich object in the perception scenario is the woz-analog, and which button activates it? Answer as a fenced JSON block with keys `analog` (the perception object's name) and `button_color` (the color of the activating button on that object).",
   "variant": "feature_misleading"
 }

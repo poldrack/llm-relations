@@ -1,23 +1,39 @@
 {
   "correct_answer": {
-    "analog": "ikk",
-    "button_color": "purple"
+    "analog": "mek",
+    "button_color": "yellow"
   },
   "metadata": {
+    "activation_position": "top",
     "correct_slot_index": 1,
     "feature_distractor_slot": 0,
     "feature_match_answer": {
-      "analog": "snig",
-      "button_color": "purple"
+      "analog": "ikk",
+      "button_color": "black"
     },
+    "feature_twin_role": 0,
+    "filler_role": 1,
+    "memory_slot_order": [
+      0,
+      1
+    ],
+    "memory_target_name": "zant",
     "n_objects": 3,
+    "perception_slot_order": [
+      0,
+      1
+    ],
     "positional_match_answer": {
-      "analog": "snig",
-      "button_color": "yellow"
+      "analog": "ikk",
+      "button_color": "black"
     },
-    "seed": 1001
+    "seed": 1001,
+    "slot_orders_aligned": true,
+    "structural_correct_analog": "mek",
+    "structural_correct_button_color": "yellow",
+    "target_role": 2
   },
   "problem_id": "baseline_00",
-  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a bep has a property: it can be activated by pressing one of its buttons. Your job is to figure out which object in the perception scenario is the bep-analog, and therefore which button on it can be activated.\n\nMemory scenario: There are three objects on a table: a bep, a zop, and a zant. The bep is underneath the zop. The zop is to-the-left-of the zant. The bep has a purple button on top, a yellow button on side, and a blue button on bottom. The zop has a yellow button on top and a purple button on bottom. The zant has a blue button on top and a purple button on side. Pressing the purple button on the bep activates it.\n\nPerception scenario: There are three objects on a shelf: a snig, a ikk, and a mek. The ikk is underneath the snig. The snig is to-the-left-of the mek. The snig has a yellow button on top and a purple button on side. The ikk has a purple button on top, a yellow button on side, and a blue button on bottom. The mek has a blue button on top and a yellow button on bottom.\n\nWhich object in the perception scenario is the bep-analog, and which button activates it?",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a zant has a property: it can be activated by pressing the button at a specific position on it. Your job is to figure out which object in the perception scenario is the zant-analog, and therefore which button on it activates it.\n\nMemory scenario: There are three objects on a table: a bep, a zop, and a zant. The bep is underneath the zop. The zop is to-the-left-of the zant. The bep has a purple button on top, a cyan button on side, and a blue button on bottom. The zop has a orange button on top, a brown button on side, and a yellow button on bottom. The zant has a black button on top, a pink button on side, and a green button on bottom. Pressing the button on the top of the zant activates it.\n\nPerception scenario: There are three objects on a shelf: a ikk, a mek, and a snig. The ikk is underneath the snig. The snig is to-the-left-of the mek. The ikk has a black button on top, a pink button on side, and a green button on bottom. The mek has a yellow button on top, a orange button on side, and a brown button on bottom. The snig has a purple button on top, a cyan button on side, and a blue button on bottom.\n\nWhich object in the perception scenario is the zant-analog, and which button activates it? Answer as a fenced JSON block with keys `analog` (the perception object's name) and `button_color` (the color of the activating button on that object).",
   "variant": "baseline"
 }

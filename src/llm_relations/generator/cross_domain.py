@@ -1,180 +1,140 @@
+"""Cross-domain variant.
+
+A *true* cross-domain analogy test: the memory scenario is narrated in
+one surface domain (e.g. an organization chart with employees and
+specialties) while the perception scenario is narrated in a different
+surface domain (e.g. a garden of plants with leaves). The structural
+graph is identical on both sides, but the surface vocabulary,
+category nouns, feature nouns, and relation predicates all differ.
+
+Two anti-shortcut mechanisms are enabled here:
+
+1. ``memory_domain`` and ``perception_domain`` must differ. A model
+   cannot rely on string-matching predicate names between the two
+   scenarios to recover the mapping.
+
+2. The two relation predicates of each DomainSpec (a "vertical"-ish
+   and a "horizontal"-ish one) are assigned to template slots in an
+   order that is *guaranteed to differ* between the two scenarios
+   (``force_different_slot_orders=True``). This ensures memory's
+   vertical-semantic predicate is paired with perception's
+   horizontal-semantic predicate by template position. A model using
+   predicate-semantic alignment ("match the hierarchical-meaning
+   sentence to the hierarchical-meaning sentence") gets the role
+   mapping wrong; only a model that uses structural (template-position)
+   role identification succeeds.
+
+If ``memory_domain == perception_domain``, a ``ValueError`` is raised.
+"""
 from __future__ import annotations
 
-import random
-from dataclasses import dataclass
+from typing import Optional
 
+from llm_relations.generator._common import DomainSpec, build_problem_3
 from llm_relations.problem import Problem
-from llm_relations.palette import draw_nonsense_words, draw_colors
 
 
-@dataclass(frozen=True)
-class Domain:
-    name: str
-    container: str                # "on a table"
-    category: str                 # "objects"
-    feature_noun: str             # "button"
-    feature_prefix: str           # what modifier describes the feature (e.g., a color)
-    relation_vertical: str        # "is underneath"
-    relation_horizontal: str      # "is to-the-left-of"
-    activation_phrase: str        # "Pressing the {feature} {feature_noun} on the {name}"
-
-
-_DOMAINS: dict[str, Domain] = {
-    "org_chart": Domain(
-        name="org_chart",
-        container="in an organization",
-        category="employees",
+_DOMAINS: dict[str, DomainSpec] = {
+    "org_chart": DomainSpec(
+        memory_container_phrase="in an organization",
+        perception_container_phrase="in another organization",
+        category_singular="employee",
+        category_plural="employees",
         feature_noun="specialty",
         feature_prefix="color-coded",
         relation_vertical="reports-to",
         relation_horizontal="sits-beside",
-        activation_phrase="Assigning the {feature} {feature_noun} to the {name}",
+        activation_phrase="Assigning the {feature_noun} at the {position} position of the {name}",
+        instruction_verb="assigning",
     ),
-    "garden": Domain(
-        name="garden",
-        container="in a garden",
-        category="plants",
+    "garden": DomainSpec(
+        memory_container_phrase="in a garden",
+        perception_container_phrase="in another garden",
+        category_singular="plant",
+        category_plural="plants",
         feature_noun="leaf",
         feature_prefix="colored",
         relation_vertical="is-growing-under",
-        relation_horizontal="is-to-the-left-of",
-        activation_phrase="Clipping the {feature} {feature_noun} from the {name}",
+        relation_horizontal="grows-beside",
+        activation_phrase="Clipping the {feature_noun} at the {position} of the {name}",
+        instruction_verb="clipping",
     ),
-    "building": Domain(
-        name="building",
-        container="in a building",
-        category="rooms",
+    "building": DomainSpec(
+        memory_container_phrase="in a building",
+        perception_container_phrase="in another building",
+        category_singular="room",
+        category_plural="rooms",
         feature_noun="fixture",
         feature_prefix="colored",
         relation_vertical="is-directly-below",
         relation_horizontal="is-adjacent-to",
-        activation_phrase="Operating the {feature} {feature_noun} in the {name}",
+        activation_phrase="Operating the {feature_noun} at the {position} of the {name}",
+        instruction_verb="operating",
     ),
-    "enclosure": Domain(
-        name="enclosure",
-        container="in an enclosure",
-        category="animals",
+    "enclosure": DomainSpec(
+        memory_container_phrase="in an enclosure",
+        perception_container_phrase="in another enclosure",
+        category_singular="animal",
+        category_plural="animals",
         feature_noun="marking",
         feature_prefix="colored",
-        relation_vertical="is-beneath",
-        relation_horizontal="is-to-the-left-of",
-        activation_phrase="Touching the {feature} {feature_noun} on the {name}",
+        relation_vertical="lies-beneath",
+        relation_horizontal="roams-beside",
+        activation_phrase="Touching the {feature_noun} at the {position} of the {name}",
+        instruction_verb="touching",
     ),
-    "vehicle_lot": Domain(
-        name="vehicle_lot",
-        container="in a lot",
-        category="vehicles",
+    "vehicle_lot": DomainSpec(
+        memory_container_phrase="in a lot",
+        perception_container_phrase="in another lot",
+        category_singular="vehicle",
+        category_plural="vehicles",
         feature_noun="panel",
         feature_prefix="colored",
-        relation_vertical="is-parked-beneath",
+        relation_vertical="is-stacked-below",
         relation_horizontal="is-parked-to-the-left-of",
-        activation_phrase="Switching the {feature} {feature_noun} on the {name}",
+        activation_phrase="Switching the {feature_noun} at the {position} of the {name}",
+        instruction_verb="switching",
     ),
 }
 
 DOMAINS = list(_DOMAINS.keys())
 
-_POSITIONS = ["top", "bottom", "side"]
-
-
-def _describe(name: str, feature_noun: str, feature_prefix: str, features: list[tuple[str, str]]) -> str:
-    parts = [f"a {feat} {feature_prefix} {feature_noun} on {pos}" for feat, pos in features]
-    if len(parts) == 2:
-        body = f"{parts[0]} and {parts[1]}"
-    else:
-        body = ", ".join(parts[:-1]) + f", and {parts[-1]}"
-    return f"The {name} has {body}."
-
 
 def generate_cross_domain(
     seed: int,
     index: int,
-    domain: str,
+    memory_domain: str,
+    perception_domain: str,
     correct_slot_index: int,
     feature_distractor_slot: int,
+    target_role: Optional[int] = None,
+    activation_position: Optional[str] = None,
 ) -> Problem:
-    assert domain in _DOMAINS, f"unknown domain: {domain}"
-    assert 0 <= correct_slot_index < 3
-    assert 0 <= feature_distractor_slot < 3
-    assert correct_slot_index != feature_distractor_slot
+    assert memory_domain in _DOMAINS, f"unknown memory_domain: {memory_domain}"
+    assert perception_domain in _DOMAINS, f"unknown perception_domain: {perception_domain}"
+    if memory_domain == perception_domain:
+        raise ValueError(
+            f"cross_domain requires distinct domains; got {memory_domain!r} for both scenarios"
+        )
 
-    d = _DOMAINS[domain]
-    rng = random.Random(seed)
-    words = draw_nonsense_words(rng, n=6)
-    m0, m1, m2 = words[:3]
-    perception_words = words[3:]
+    m_dom = _DOMAINS[memory_domain]
+    p_dom = _DOMAINS[perception_domain]
 
-    colors = draw_colors(rng, n=3)
-    target_color, other1, other2 = colors
-
-    m0_feats = [(target_color, "top"), (other1, "side"), (other2, "bottom")]
-    m1_feats = [(other1, "top"), (target_color, "bottom")]
-    m2_feats = [(other2, "top"), (target_color, "side")]
-
-    memory_text = " ".join([
-        f"Memory scenario: There are three {d.category} {d.container}: a {m0}, a {m1}, and a {m2}.",
-        f"The {m0} {d.relation_vertical} the {m1}.",
-        f"The {m1} {d.relation_horizontal} the {m2}.",
-        _describe(m0, d.feature_noun, d.feature_prefix, m0_feats),
-        _describe(m1, d.feature_noun, d.feature_prefix, m1_feats),
-        _describe(m2, d.feature_noun, d.feature_prefix, m2_feats),
-        d.activation_phrase.format(feature=target_color, feature_noun=d.feature_noun, name=m0) + " activates it.",
-    ])
-
-    correct_analog = perception_words[0]
-    list_order: list[str | None] = [None, None, None]
-    list_order[correct_slot_index] = correct_analog
-    remaining = [perception_words[1], perception_words[2]]
-    distractor = remaining[0]
-    list_order[feature_distractor_slot] = distractor
-    other_slot = [i for i in range(3) if list_order[i] is None][0]
-    list_order[other_slot] = remaining[1]
-
-    perception_feats = {
-        correct_analog: [(target_color, "top"), (other1, "side"), (other2, "bottom")],
-        distractor: [(other1, "top"), (target_color, "side")],
-        remaining[1]: [(other2, "top"), (other1, "bottom")],
-    }
-
-    perception_text = " ".join([
-        f"Perception scenario: There are three {d.category} {d.container}: "
-        f"a {list_order[0]}, a {list_order[1]}, and a {list_order[2]}.",
-        f"The {perception_words[0]} {d.relation_vertical} the {perception_words[1]}.",
-        f"The {perception_words[1]} {d.relation_horizontal} the {perception_words[2]}.",
-        _describe(list_order[0], d.feature_noun, d.feature_prefix, perception_feats[list_order[0]]),
-        _describe(list_order[1], d.feature_noun, d.feature_prefix, perception_feats[list_order[1]]),
-        _describe(list_order[2], d.feature_noun, d.feature_prefix, perception_feats[list_order[2]]),
-    ])
-
-    question = (
-        f"Which {d.category[:-1]} in the perception scenario is the {m0}-analog, "
-        f"and which {d.feature_prefix} {d.feature_noun} activates it?"
-    )
-
-    instruction = (
-        f"I'm going to describe two scenarios. In the memory scenario, a novel {d.category[:-1]} called "
-        f"a {m0} has a property: it can be activated by one of its {d.feature_prefix} {d.feature_noun}s. "
-        f"Your job is to figure out which {d.category[:-1]} in the perception scenario is the {m0}-analog, "
-        f"and therefore which {d.feature_prefix} {d.feature_noun} on it can be activated."
-    )
-
-    prompt = "\n\n".join([instruction, memory_text, perception_text, question])
-
-    positional_analog = list_order[0]
-    positional_feature = next(c for c, p in perception_feats[positional_analog] if p == "top")
-
-    return Problem(
-        problem_id=f"cross_domain_{index:02d}",
+    return build_problem_3(
+        seed=seed,
+        index=index,
         variant="cross_domain",
-        prompt_text=prompt,
-        correct_answer={"analog": correct_analog, "button_color": target_color},
-        metadata={
-            "n_objects": 3,
-            "seed": seed,
-            "domain": domain,
-            "correct_slot_index": correct_slot_index,
-            "feature_distractor_slot": feature_distractor_slot,
-            "feature_match_answer": {"analog": distractor, "button_color": target_color},
-            "positional_match_answer": {"analog": positional_analog, "button_color": positional_feature},
+        problem_id=f"cross_domain_{index:02d}",
+        correct_slot_index=correct_slot_index,
+        feature_distractor_slot=feature_distractor_slot,
+        target_role=target_role,
+        activation_position=activation_position,
+        memory_domain=m_dom,
+        perception_domain=p_dom,
+        scramble_relation_slot_order=True,
+        force_different_slot_orders=True,
+        extra_metadata={
+            "memory_domain": memory_domain,
+            "perception_domain": perception_domain,
         },
     )

@@ -1,23 +1,39 @@
 {
   "correct_answer": {
-    "analog": "glim",
+    "analog": "nop",
     "button_color": "yellow"
   },
   "metadata": {
+    "activation_position": "side",
     "correct_slot_index": 1,
     "feature_distractor_slot": 2,
     "feature_match_answer": {
-      "analog": "xav",
-      "button_color": "yellow"
+      "analog": "glim",
+      "button_color": "brown"
     },
+    "feature_twin_role": 0,
+    "filler_role": 1,
+    "memory_slot_order": [
+      0,
+      1
+    ],
+    "memory_target_name": "muk",
     "n_objects": 3,
+    "perception_slot_order": [
+      0,
+      1
+    ],
     "positional_match_answer": {
-      "analog": "nop",
+      "analog": "xav",
       "button_color": "red"
     },
-    "seed": 1003
+    "seed": 1003,
+    "slot_orders_aligned": true,
+    "structural_correct_analog": "nop",
+    "structural_correct_button_color": "yellow",
+    "target_role": 2
   },
   "problem_id": "baseline_02",
-  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a clop has a property: it can be activated by pressing one of its buttons. Your job is to figure out which object in the perception scenario is the clop-analog, and therefore which button on it can be activated.\n\nMemory scenario: There are three objects on a table: a clop, a moob, and a muk. The clop is underneath the moob. The moob is to-the-left-of the muk. The clop has a yellow button on top, a purple button on side, and a red button on bottom. The moob has a purple button on top and a yellow button on bottom. The muk has a red button on top and a yellow button on side. Pressing the yellow button on the clop activates it.\n\nPerception scenario: There are three objects on a shelf: a nop, a glim, and a xav. The glim is underneath the xav. The xav is to-the-left-of the nop. The nop has a red button on top and a purple button on bottom. The glim has a yellow button on top, a purple button on side, and a red button on bottom. The xav has a purple button on top and a yellow button on side.\n\nWhich object in the perception scenario is the clop-analog, and which button activates it?",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a muk has a property: it can be activated by pressing the button at a specific position on it. Your job is to figure out which object in the perception scenario is the muk-analog, and therefore which button on it activates it.\n\nMemory scenario: There are three objects on a table: a clop, a moob, and a muk. The clop is underneath the moob. The moob is to-the-left-of the muk. The clop has a red button on top, a orange button on side, and a purple button on bottom. The moob has a green button on top, a yellow button on side, and a blue button on bottom. The muk has a cyan button on top, a brown button on side, and a black button on bottom. Pressing the button on the side of the muk activates it.\n\nPerception scenario: There are three objects on a shelf: a xav, a nop, and a glim. The glim is underneath the xav. The xav is to-the-left-of the nop. The xav has a purple button on top, a red button on side, and a orange button on bottom. The nop has a blue button on top, a yellow button on side, and a green button on bottom. The glim has a cyan button on top, a brown button on side, and a black button on bottom.\n\nWhich object in the perception scenario is the muk-analog, and which button activates it? Answer as a fenced JSON block with keys `analog` (the perception object's name) and `button_color` (the color of the activating button on that object).",
   "variant": "baseline"
 }

@@ -33,6 +33,19 @@ def main() -> None:
     )
     parser.add_argument("--n-samples", type=int, default=5)
     parser.add_argument(
+        "--variants",
+        nargs="+",
+        default=None,
+        metavar="VARIANT",
+        help=(
+            "If provided, only run problems with these variant labels "
+            "(e.g. --variants cross_domain baseline). "
+            "Known variants: baseline, feature_misleading, adversarial, "
+            "cross_domain, scale, control. Default: run all variants present "
+            "in the problems directory."
+        ),
+    )
+    parser.add_argument(
         "--no-cot",
         action="store_true",
         help="Omit the 'think step by step' instruction from the system prompt.",
@@ -56,6 +69,7 @@ def main() -> None:
         model_specs=specs,
         n_samples=args.n_samples,
         use_cot=not args.no_cot,
+        variants=args.variants,
     )
     print(f"Done. Summary at {args.results_dir / 'summary.csv'}")
 
