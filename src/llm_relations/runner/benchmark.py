@@ -9,7 +9,7 @@ from typing import Optional
 
 from llm_relations.parser import parse_answer, ParseError
 from llm_relations.problem import Problem, load_problem
-from llm_relations.runner.client import ClaudeClient
+from llm_relations.runner.client import ClaudeClient, build_system_prompt
 from llm_relations.scorer import score_answer
 
 
@@ -19,6 +19,7 @@ class SampleRecord:
     model: str
     sample: int
     variant: str
+    prompt_variant: str
     prompt: str
     response_text: str
     parsed_answer: Optional[dict[str, str]]
@@ -37,8 +38,12 @@ def _run_one_sample(
     model: str,
     sample: int,
     problem: Problem,
+    system_prompt: str,
+    prompt_variant: str,
 ) -> SampleRecord:
-    result = client.call(model=model, user_prompt=problem.prompt_text)
+    result = client.call(
+        model=model, user_prompt=problem.prompt_text, system_prompt=system_prompt
+    )
     try:
         parsed = parse_answer(result.response_text)
     except ParseError:
@@ -49,6 +54,7 @@ def _run_one_sample(
         model=model,
         sample=sample,
         variant=problem.variant,
+        prompt_variant=prompt_variant,
         prompt=problem.prompt_text,
         response_text=result.response_text,
         parsed_answer=parsed,
@@ -64,19 +70,28 @@ def _run_one_sample(
 
 
 def _write_sample(results_dir: Path, record: SampleRecord) -> None:
-    out_dir = results_dir / "raw" / record.model / record.problem_id
+    out_dir = results_dir / "raw" / record.prompt_variant / record.model / record.problem_id
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / f"sample_{record.sample}.json").write_text(
         json.dumps(asdict(record), indent=2, sort_keys=True)
     )
 
 
-def _write_summary(results_dir: Path, records: list[SampleRecord]) -> None:
-    rows: dict[tuple[str, str], dict] = {}
+SUMMARY_FIELDNAMES = [
+    "prompt_variant", "model", "variant", "problem_id",
+    "n_samples", "n_correct", "accuracy",
+    "n_feature_match", "n_positional_match", "n_other", "n_parse_error",
+    "mean_output_tokens", "mean_latency_ms",
+]
+
+
+def _aggregate(records: list[SampleRecord]) -> dict[tuple[str, str, str], dict]:
+    rows: dict[tuple[str, str, str], dict] = {}
     for r in records:
-        key = (r.model, r.problem_id)
+        key = (r.prompt_variant, r.model, r.problem_id)
         if key not in rows:
             rows[key] = {
+                "prompt_variant": r.prompt_variant,
                 "model": r.model,
                 "variant": r.variant,
                 "problem_id": r.problem_id,
@@ -102,32 +117,53 @@ def _write_summary(results_dir: Path, records: list[SampleRecord]) -> None:
             agg["n_other"] += 1
         agg["total_output_tokens"] += r.output_tokens
         agg["total_latency_ms"] += r.latency_ms
+    return rows
 
-    fieldnames = [
-        "model", "variant", "problem_id", "n_samples", "n_correct", "accuracy",
-        "n_feature_match", "n_positional_match", "n_other", "n_parse_error",
-        "mean_output_tokens", "mean_latency_ms",
-    ]
+
+def _agg_to_csv_row(agg: dict) -> dict:
+    n = agg["n_samples"]
+    return {
+        "prompt_variant": agg["prompt_variant"],
+        "model": agg["model"],
+        "variant": agg["variant"],
+        "problem_id": agg["problem_id"],
+        "n_samples": n,
+        "n_correct": agg["n_correct"],
+        "accuracy": agg["n_correct"] / n if n else 0.0,
+        "n_feature_match": agg["n_feature_match"],
+        "n_positional_match": agg["n_positional_match"],
+        "n_other": agg["n_other"],
+        "n_parse_error": agg["n_parse_error"],
+        "mean_output_tokens": agg["total_output_tokens"] / n if n else 0,
+        "mean_latency_ms": agg["total_latency_ms"] / n if n else 0,
+    }
+
+
+def _read_existing_summary(csv_path: Path) -> list[dict]:
+    if not csv_path.exists():
+        return []
+    with csv_path.open(newline="") as f:
+        return list(csv.DictReader(f))
+
+
+def _write_summary(results_dir: Path, records: list[SampleRecord]) -> None:
     csv_path = results_dir / "summary.csv"
+    new_rows = _aggregate(records)
+    # Preserve prior rows whose (prompt_variant, model, problem_id) key is
+    # not being overwritten by this run.
+    preserved = [
+        row for row in _read_existing_summary(csv_path)
+        if (row.get("prompt_variant", ""), row["model"], row["problem_id"]) not in new_rows
+    ]
+
+    results_dir.mkdir(parents=True, exist_ok=True)
     with csv_path.open("w", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer = csv.DictWriter(f, fieldnames=SUMMARY_FIELDNAMES)
         writer.writeheader()
-        for agg in rows.values():
-            n = agg["n_samples"]
-            writer.writerow({
-                "model": agg["model"],
-                "variant": agg["variant"],
-                "problem_id": agg["problem_id"],
-                "n_samples": n,
-                "n_correct": agg["n_correct"],
-                "accuracy": agg["n_correct"] / n if n else 0.0,
-                "n_feature_match": agg["n_feature_match"],
-                "n_positional_match": agg["n_positional_match"],
-                "n_other": agg["n_other"],
-                "n_parse_error": agg["n_parse_error"],
-                "mean_output_tokens": agg["total_output_tokens"] / n if n else 0,
-                "mean_latency_ms": agg["total_latency_ms"] / n if n else 0,
-            })
+        for row in preserved:
+            writer.writerow({k: row.get(k, "") for k in SUMMARY_FIELDNAMES})
+        for agg in new_rows.values():
+            writer.writerow(_agg_to_csv_row(agg))
 
 
 def run_benchmark(
@@ -136,13 +172,18 @@ def run_benchmark(
     models: list[str],
     n_samples: int,
     client: ClaudeClient,
+    use_cot: bool = True,
 ) -> None:
     problems = [load_problem(f) for f in sorted(problems_dir.glob("*.json"))]
+    system_prompt = build_system_prompt(use_cot=use_cot)
+    prompt_variant = "cot" if use_cot else "no_cot"
     records: list[SampleRecord] = []
     for model in models:
         for problem in problems:
             for s in range(n_samples):
-                record = _run_one_sample(client, model, s, problem)
+                record = _run_one_sample(
+                    client, model, s, problem, system_prompt, prompt_variant
+                )
                 _write_sample(results_dir, record)
                 records.append(record)
     _write_summary(results_dir, records)

@@ -6,18 +6,35 @@ from dataclasses import dataclass
 from anthropic import Anthropic, APIStatusError, RateLimitError
 
 
-SYSTEM_PROMPT = (
+_TASK_DESCRIPTION = (
     "You are solving relational reasoning problems. Each problem has a memory scenario "
     "and a perception scenario. Your task is to map objects in the perception scenario "
     "to objects in the memory scenario based on their relational structure (how they "
-    "relate to each other), then answer a specific question.\n\n"
+    "relate to each other), then answer a specific question."
+)
+
+_COT_INSTRUCTION = (
     "Think step by step: first identify the relations in each scenario, then find the "
-    "mapping that preserves relational structure, then answer.\n\n"
+    "mapping that preserves relational structure, then answer."
+)
+
+_ANSWER_FORMAT = (
     "End your response with a JSON block in this exact format:\n"
     "```json\n"
     '{"analog": "<object_name>", "button_color": "<color>"}\n'
     "```"
 )
+
+
+def build_system_prompt(use_cot: bool = True) -> str:
+    parts = [_TASK_DESCRIPTION]
+    if use_cot:
+        parts.append(_COT_INSTRUCTION)
+    parts.append(_ANSWER_FORMAT)
+    return "\n\n".join(parts)
+
+
+SYSTEM_PROMPT = build_system_prompt(use_cot=True)
 
 
 @dataclass(frozen=True)
@@ -46,6 +63,7 @@ class ClaudeClient:
         user_prompt: str,
         max_tokens: int = 4096,
         temperature: float = 1.0,
+        system_prompt: str = SYSTEM_PROMPT,
     ) -> CallResult:
         attempt = 0
         while True:
@@ -58,7 +76,7 @@ class ClaudeClient:
                     system=[
                         {
                             "type": "text",
-                            "text": SYSTEM_PROMPT,
+                            "text": system_prompt,
                             "cache_control": {"type": "ephemeral"},
                         }
                     ],

@@ -22,6 +22,11 @@ def main() -> None:
     parser.add_argument("--results-dir", type=Path, default=Path("results"))
     parser.add_argument("--models", nargs="+", default=DEFAULT_MODELS)
     parser.add_argument("--n-samples", type=int, default=5)
+    parser.add_argument(
+        "--no-cot",
+        action="store_true",
+        help="Omit the 'think step by step' instruction from the system prompt.",
+    )
     args = parser.parse_args()
 
     api_key = os.environ.get("ANTHROPIC_API_KEY")
@@ -35,6 +40,7 @@ def main() -> None:
         models=args.models,
         n_samples=args.n_samples,
         client=client,
+        use_cot=not args.no_cot,
     )
     print(f"Done. Summary at {args.results_dir / 'summary.csv'}")
 
