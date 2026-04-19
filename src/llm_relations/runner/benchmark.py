@@ -71,6 +71,17 @@ def _run_one_sample(
     )
 
 
+def _safe_model_name(display_name: str) -> str:
+    """Sanitize a model display_name for filesystem use.
+
+    Slashes in display names like 'lmstudio:google/gemma-3n-e4b' would
+    otherwise create nested directories. The on-disk layout is flat, so we
+    replace slashes with underscores. The JSON record and summary CSV still
+    keep the unsanitized display_name.
+    """
+    return display_name.replace("/", "_")
+
+
 def _next_sample_index(
     results_dir: Path,
     prompt_variant: str,
@@ -84,7 +95,7 @@ def _next_sample_index(
     does not exist or contains no well-formed sample files. Gaps are not
     filled — new samples always land at `max + 1`.
     """
-    safe_model = display_name.replace("/", "_")
+    safe_model = _safe_model_name(display_name)
     out_dir = results_dir / "raw" / prompt_variant / safe_model / problem_id
     if not out_dir.exists():
         return 0
@@ -99,11 +110,33 @@ def _next_sample_index(
     return max_idx + 1
 
 
+def _load_samples_on_disk(
+    results_dir: Path,
+    prompt_variant: str,
+    display_name: str,
+    problem_id: str,
+) -> list[SampleRecord]:
+    """Load every `sample_*.json` for a given (variant, model, problem) key.
+
+    Used by `_write_summary` so that re-runs aggregate across all samples on
+    disk (old + new), not just the ones produced by the current run.
+    """
+    safe_model = _safe_model_name(display_name)
+    out_dir = results_dir / "raw" / prompt_variant / safe_model / problem_id
+    if not out_dir.exists():
+        return []
+    samples: list[SampleRecord] = []
+    for f in sorted(out_dir.glob("sample_*.json")):
+        data = json.loads(f.read_text())
+        samples.append(SampleRecord(**data))
+    return samples
+
+
 def _write_sample(results_dir: Path, record: SampleRecord) -> None:
     # Sanitize for filesystem use only — the JSON record and summary CSV keep
     # the unsanitized display_name. Slashes in model names (e.g.
     # 'lmstudio:google/gemma-3n-e4b') would otherwise create nested dirs.
-    safe_model = record.model.replace("/", "_")
+    safe_model = _safe_model_name(record.model)
     out_dir = results_dir / "raw" / record.prompt_variant / safe_model / record.problem_id
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / f"sample_{record.sample}.json").write_text(
@@ -182,10 +215,22 @@ def _read_existing_summary(csv_path: Path) -> list[dict]:
 
 def _write_summary(results_dir: Path, records: list[SampleRecord]) -> None:
     csv_path = results_dir / "summary.csv"
-    new_rows = _aggregate(records)
-    # Keep prior rows whose (prompt_variant, model, problem_id) key is not
-    # being overwritten by this run, so re-running with new prompt variants
-    # accumulates rather than clobbers.
+
+    # Keys touched by this run. For each, aggregate over ALL sample files on
+    # disk (prior + new), not just the in-memory records from this run, so
+    # appending new samples produces a summary row covering the full set.
+    touched_keys = {
+        (r.prompt_variant, r.model, r.problem_id) for r in records
+    }
+    on_disk_records: list[SampleRecord] = []
+    for prompt_variant, model, problem_id in touched_keys:
+        on_disk_records.extend(
+            _load_samples_on_disk(results_dir, prompt_variant, model, problem_id)
+        )
+    new_rows = _aggregate(on_disk_records)
+
+    # Preserve prior rows whose key is not touched by this run, so re-running
+    # with new prompt variants (or new models) accumulates rather than clobbers.
     preserved = [
         row for row in _read_existing_summary(csv_path)
         if (row.get("prompt_variant", ""), row["model"], row["problem_id"]) not in new_rows
