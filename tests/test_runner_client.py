@@ -63,7 +63,7 @@ def test_build_system_prompt_no_cot_excludes_both_instructions():
 def test_build_system_prompt_graphical_model_includes_graph_instruction():
     prompt = build_system_prompt("graphical_model")
     # Names the technique explicitly.
-    assert "graphical model" in prompt.lower() or "graph" in prompt.lower()
+    assert "graph" in prompt.lower()
     # Does NOT include the CoT "Think step by step" instruction —
     # graphical_model is an alternative, not an addition.
     assert "Think step by step" not in prompt
@@ -72,7 +72,6 @@ def test_build_system_prompt_graphical_model_includes_graph_instruction():
 
 
 def test_build_system_prompt_unknown_variant_raises():
-    import pytest
     with pytest.raises(ValueError) as excinfo:
         build_system_prompt("bogus")
     msg = str(excinfo.value)
