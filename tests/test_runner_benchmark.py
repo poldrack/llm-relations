@@ -111,7 +111,7 @@ def test_run_benchmark_nests_raw_under_prompt_variant(tmp_path: Path):
         results_dir=results_dir,
         model_specs=[_spec("claude-haiku-4-5-20251001", client)],
         n_samples=1,
-        use_cot=False,
+        prompt_variant="no_cot",
     )
 
     path = (results_dir / "raw" / "no_cot" / "claude-haiku-4-5-20251001"
@@ -137,7 +137,7 @@ def test_run_benchmark_summary_includes_prompt_variant_column(tmp_path: Path):
         results_dir=results_dir,
         model_specs=[_spec("claude-haiku-4-5-20251001", client)],
         n_samples=1,
-        use_cot=False,
+        prompt_variant="no_cot",
     )
 
     summary = (results_dir / "summary.csv").read_text()
@@ -160,11 +160,11 @@ def test_run_benchmark_summary_merges_existing_rows(tmp_path: Path):
 
     run_benchmark(
         problems_dir=problems_dir, results_dir=results_dir,
-        model_specs=[spec], n_samples=1, use_cot=True,
+        model_specs=[spec], n_samples=1, prompt_variant="cot",
     )
     run_benchmark(
         problems_dir=problems_dir, results_dir=results_dir,
-        model_specs=[spec], n_samples=1, use_cot=False,
+        model_specs=[spec], n_samples=1, prompt_variant="no_cot",
     )
 
     import csv as _csv
@@ -190,7 +190,7 @@ def test_run_benchmark_passes_no_cot_system_prompt_to_client(tmp_path: Path):
         results_dir=results_dir,
         model_specs=[_spec("claude-haiku-4-5-20251001", client)],
         n_samples=1,
-        use_cot=False,
+        prompt_variant="no_cot",
     )
 
     call_kwargs = client.call.call_args.kwargs
@@ -359,12 +359,12 @@ def test_run_benchmark_appends_samples_when_prior_exist(tmp_path: Path):
     # First run: writes sample_0.json and sample_1.json
     run_benchmark(
         problems_dir=problems_dir, results_dir=results_dir,
-        model_specs=[spec], n_samples=2, use_cot=True,
+        model_specs=[spec], n_samples=2, prompt_variant="cot",
     )
     # Second run: should write sample_2.json and sample_3.json (not overwrite)
     run_benchmark(
         problems_dir=problems_dir, results_dir=results_dir,
-        model_specs=[spec], n_samples=2, use_cot=True,
+        model_specs=[spec], n_samples=2, prompt_variant="cot",
     )
 
     target_dir = (
@@ -398,11 +398,11 @@ def test_run_benchmark_summary_aggregates_across_prior_and_new_samples(
 
     run_benchmark(
         problems_dir=problems_dir, results_dir=results_dir,
-        model_specs=[spec], n_samples=2, use_cot=True,
+        model_specs=[spec], n_samples=2, prompt_variant="cot",
     )
     run_benchmark(
         problems_dir=problems_dir, results_dir=results_dir,
-        model_specs=[spec], n_samples=2, use_cot=True,
+        model_specs=[spec], n_samples=2, prompt_variant="cot",
     )
 
     import csv as _csv
@@ -629,7 +629,7 @@ def test_run_benchmark_sample_index_skips_gaps(tmp_path: Path):
     run_benchmark(
         problems_dir=problems_dir, results_dir=results_dir,
         model_specs=[_spec("claude-haiku-4-5-20251001", client)],
-        n_samples=1, use_cot=True,
+        n_samples=1, prompt_variant="cot",
     )
 
     files = sorted(f.name for f in target_dir.glob("sample_*.json"))
@@ -639,3 +639,65 @@ def test_run_benchmark_sample_index_skips_gaps(tmp_path: Path):
     # The newly written record is index 3.
     rec = json.loads((target_dir / "sample_3.json").read_text())
     assert rec["sample"] == 3
+
+
+def test_run_benchmark_writes_samples_under_graphical_model_variant(tmp_path: Path):
+    p = _problem()
+    problems_dir = tmp_path / "problems"
+    problems_dir.mkdir()
+    save_problem(p, problems_dir / f"{p.problem_id}.json")
+    results_dir = tmp_path / "results"
+
+    client = _client_returning(
+        '```json\n{"analog": "mek", "button_color": "blue"}\n```'
+    )
+
+    run_benchmark(
+        problems_dir=problems_dir,
+        results_dir=results_dir,
+        model_specs=[_spec("claude-haiku-4-5-20251001", client)],
+        n_samples=1,
+        prompt_variant="graphical_model",
+    )
+
+    # Directory tree uses the variant name verbatim.
+    sample_path = (
+        results_dir / "raw" / "graphical_model" / "claude-haiku-4-5-20251001"
+        / p.problem_id / "sample_0.json"
+    )
+    assert sample_path.exists()
+    rec = json.loads(sample_path.read_text())
+    assert rec["prompt_variant"] == "graphical_model"
+
+    # The graphical-model instruction was sent in the system prompt.
+    sys_prompt = client.call.call_args.kwargs["system_prompt"]
+    assert "graph" in sys_prompt.lower()
+
+    # Summary CSV carries the variant too.
+    summary = (results_dir / "summary.csv").read_text()
+    assert "graphical_model" in summary
+
+
+def test_run_benchmark_rejects_unknown_prompt_variant_before_calling_client(
+    tmp_path: Path,
+):
+    p = _problem()
+    problems_dir = tmp_path / "problems"
+    problems_dir.mkdir()
+    save_problem(p, problems_dir / f"{p.problem_id}.json")
+    results_dir = tmp_path / "results"
+
+    client = _client_returning("unused")
+
+    import pytest
+    with pytest.raises(ValueError, match="bogus"):
+        run_benchmark(
+            problems_dir=problems_dir,
+            results_dir=results_dir,
+            model_specs=[_spec("claude-haiku-4-5-20251001", client)],
+            n_samples=1,
+            prompt_variant="bogus",
+        )
+
+    # No API calls were made — validation happened first.
+    assert client.call.call_count == 0

@@ -43,23 +43,48 @@ def test_client_calls_messages_create_with_expected_arguments(mocker):
     assert call_kwargs["messages"] == [{"role": "user", "content": "Solve this."}]
 
 
-def test_build_system_prompt_with_cot_includes_think_step_by_step():
-    prompt = build_system_prompt(use_cot=True)
+def test_build_system_prompt_cot_includes_think_step_by_step():
+    prompt = build_system_prompt("cot")
     assert "Think step by step" in prompt
     # Still includes the JSON format instruction.
     assert "```json" in prompt
 
 
-def test_build_system_prompt_without_cot_omits_think_step_by_step():
-    prompt = build_system_prompt(use_cot=False)
+def test_build_system_prompt_no_cot_excludes_both_instructions():
+    prompt = build_system_prompt("no_cot")
     assert "Think step by step" not in prompt
     assert "step by step" not in prompt.lower()
+    assert "graphical model" not in prompt.lower()
+    assert "graph" not in prompt.lower()
     # Still includes the JSON format instruction.
     assert "```json" in prompt
 
 
+def test_build_system_prompt_graphical_model_includes_graph_instruction():
+    prompt = build_system_prompt("graphical_model")
+    # Names the technique explicitly.
+    assert "graphical model" in prompt.lower() or "graph" in prompt.lower()
+    # Does NOT include the CoT "Think step by step" instruction —
+    # graphical_model is an alternative, not an addition.
+    assert "Think step by step" not in prompt
+    # Still includes the JSON format instruction.
+    assert "```json" in prompt
+
+
+def test_build_system_prompt_unknown_variant_raises():
+    import pytest
+    with pytest.raises(ValueError) as excinfo:
+        build_system_prompt("bogus")
+    msg = str(excinfo.value)
+    # Message names the bad variant and lists the valid ones.
+    assert "bogus" in msg
+    assert "cot" in msg
+    assert "no_cot" in msg
+    assert "graphical_model" in msg
+
+
 def test_default_system_prompt_matches_cot_variant():
-    assert SYSTEM_PROMPT == build_system_prompt(use_cot=True)
+    assert SYSTEM_PROMPT == build_system_prompt("cot")
 
 
 def test_client_call_uses_provided_system_prompt(mocker):
