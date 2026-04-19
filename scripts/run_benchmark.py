@@ -7,6 +7,7 @@ from pathlib import Path
 
 from llm_relations.runner.benchmark import run_benchmark
 from llm_relations.runner.client import ClaudeClient
+from llm_relations.runner.specs import ModelSpec
 
 
 DEFAULT_MODELS = [
@@ -34,12 +35,13 @@ def main() -> None:
         raise SystemExit("ANTHROPIC_API_KEY is not set")
 
     client = ClaudeClient(api_key=api_key)
+    specs = [ModelSpec(display_name=m, api_model_name=m, client=client) for m in args.models]
+
     run_benchmark(
         problems_dir=args.problems_dir,
         results_dir=args.results_dir,
-        models=args.models,
+        model_specs=specs,
         n_samples=args.n_samples,
-        client=client,
         use_cot=not args.no_cot,
     )
     print(f"Done. Summary at {args.results_dir / 'summary.csv'}")

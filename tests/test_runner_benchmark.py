@@ -5,6 +5,7 @@ from unittest.mock import MagicMock
 from llm_relations.problem import Problem, save_problem
 from llm_relations.runner.benchmark import run_benchmark, SampleRecord
 from llm_relations.runner.client import CallResult
+from llm_relations.runner.specs import ModelSpec
 
 
 def _problem(pid: str = "baseline_00") -> Problem:
@@ -21,6 +22,26 @@ def _problem(pid: str = "baseline_00") -> Problem:
     )
 
 
+def _spec(display_name: str, client, api_model_name: str | None = None) -> ModelSpec:
+    return ModelSpec(
+        display_name=display_name,
+        api_model_name=api_model_name or display_name,
+        client=client,
+    )
+
+
+def _client_returning(text: str) -> MagicMock:
+    client = MagicMock()
+    client.call.return_value = CallResult(
+        response_text=text,
+        input_tokens=1,
+        output_tokens=1,
+        cache_read_input_tokens=0,
+        latency_ms=1,
+    )
+    return client
+
+
 def test_run_benchmark_writes_one_file_per_sample(tmp_path: Path):
     p = _problem()
     problems_dir = tmp_path / "problems"
@@ -28,27 +49,19 @@ def test_run_benchmark_writes_one_file_per_sample(tmp_path: Path):
     save_problem(p, problems_dir / f"{p.problem_id}.json")
 
     results_dir = tmp_path / "results"
-
-    client = MagicMock()
-    client.call.return_value = CallResult(
-        response_text='Reasoning...\n```json\n{"analog": "mek", "button_color": "blue"}\n```',
-        input_tokens=500,
-        output_tokens=200,
-        cache_read_input_tokens=0,
-        latency_ms=1234,
+    client = _client_returning(
+        'Reasoning...\n```json\n{"analog": "mek", "button_color": "blue"}\n```'
     )
 
     run_benchmark(
         problems_dir=problems_dir,
         results_dir=results_dir,
-        models=["claude-haiku-4-5-20251001"],
+        model_specs=[_spec("claude-haiku-4-5-20251001", client)],
         n_samples=3,
-        client=client,
     )
 
     sample_files = list((results_dir / "raw").rglob("sample_*.json"))
     assert len(sample_files) == 3
-    # Each file parses cleanly and matches SampleRecord schema
     for f in sample_files:
         rec = json.loads(f.read_text())
         assert rec["is_correct"] is True
@@ -63,24 +76,19 @@ def test_run_benchmark_records_parse_error_when_answer_missing(tmp_path: Path):
     save_problem(p, problems_dir / f"{p.problem_id}.json")
     results_dir = tmp_path / "results"
 
-    client = MagicMock()
-    client.call.return_value = CallResult(
-        response_text="I cannot solve this.",
-        input_tokens=100,
-        output_tokens=50,
-        cache_read_input_tokens=0,
-        latency_ms=500,
-    )
+    client = _client_returning("I cannot solve this.")
 
     run_benchmark(
         problems_dir=problems_dir,
         results_dir=results_dir,
-        models=["claude-haiku-4-5-20251001"],
+        model_specs=[_spec("claude-haiku-4-5-20251001", client)],
         n_samples=1,
-        client=client,
     )
 
-    rec = json.loads((results_dir / "raw" / "cot" / "claude-haiku-4-5-20251001" / p.problem_id / "sample_0.json").read_text())
+    rec = json.loads(
+        (results_dir / "raw" / "cot" / "claude-haiku-4-5-20251001"
+         / p.problem_id / "sample_0.json").read_text()
+    )
     assert rec["parse_error"] is True
     assert rec["is_correct"] is False
     assert rec["error_type"] == "parse_error"
@@ -94,23 +102,20 @@ def test_run_benchmark_nests_raw_under_prompt_variant(tmp_path: Path):
     save_problem(p, problems_dir / f"{p.problem_id}.json")
     results_dir = tmp_path / "results"
 
-    client = MagicMock()
-    client.call.return_value = CallResult(
-        response_text='```json\n{"analog": "mek", "button_color": "blue"}\n```',
-        input_tokens=1, output_tokens=1, cache_read_input_tokens=0, latency_ms=1,
+    client = _client_returning(
+        '```json\n{"analog": "mek", "button_color": "blue"}\n```'
     )
 
     run_benchmark(
         problems_dir=problems_dir,
         results_dir=results_dir,
-        models=["claude-haiku-4-5-20251001"],
+        model_specs=[_spec("claude-haiku-4-5-20251001", client)],
         n_samples=1,
-        client=client,
         use_cot=False,
     )
 
-    # Sample nests under raw/<prompt_variant>/<model>/<problem>/
-    path = results_dir / "raw" / "no_cot" / "claude-haiku-4-5-20251001" / p.problem_id / "sample_0.json"
+    path = (results_dir / "raw" / "no_cot" / "claude-haiku-4-5-20251001"
+            / p.problem_id / "sample_0.json")
     assert path.exists()
     rec = json.loads(path.read_text())
     assert rec["prompt_variant"] == "no_cot"
@@ -123,51 +128,43 @@ def test_run_benchmark_summary_includes_prompt_variant_column(tmp_path: Path):
     save_problem(p, problems_dir / f"{p.problem_id}.json")
     results_dir = tmp_path / "results"
 
-    client = MagicMock()
-    client.call.return_value = CallResult(
-        response_text='```json\n{"analog": "mek", "button_color": "blue"}\n```',
-        input_tokens=1, output_tokens=1, cache_read_input_tokens=0, latency_ms=1,
+    client = _client_returning(
+        '```json\n{"analog": "mek", "button_color": "blue"}\n```'
     )
 
     run_benchmark(
         problems_dir=problems_dir,
         results_dir=results_dir,
-        models=["claude-haiku-4-5-20251001"],
+        model_specs=[_spec("claude-haiku-4-5-20251001", client)],
         n_samples=1,
-        client=client,
         use_cot=False,
     )
 
     summary = (results_dir / "summary.csv").read_text()
     header = summary.splitlines()[0]
     assert "prompt_variant" in header
-    # Second line should contain "no_cot"
     assert "no_cot" in summary.splitlines()[1]
 
 
 def test_run_benchmark_summary_merges_existing_rows(tmp_path: Path):
-    """Running twice with different prompt_variant accumulates both sets of rows."""
     p = _problem()
     problems_dir = tmp_path / "problems"
     problems_dir.mkdir()
     save_problem(p, problems_dir / f"{p.problem_id}.json")
     results_dir = tmp_path / "results"
 
-    client = MagicMock()
-    client.call.return_value = CallResult(
-        response_text='```json\n{"analog": "mek", "button_color": "blue"}\n```',
-        input_tokens=1, output_tokens=1, cache_read_input_tokens=0, latency_ms=1,
+    client = _client_returning(
+        '```json\n{"analog": "mek", "button_color": "blue"}\n```'
     )
+    spec = _spec("claude-haiku-4-5-20251001", client)
 
     run_benchmark(
         problems_dir=problems_dir, results_dir=results_dir,
-        models=["claude-haiku-4-5-20251001"], n_samples=1,
-        client=client, use_cot=True,
+        model_specs=[spec], n_samples=1, use_cot=True,
     )
     run_benchmark(
         problems_dir=problems_dir, results_dir=results_dir,
-        models=["claude-haiku-4-5-20251001"], n_samples=1,
-        client=client, use_cot=False,
+        model_specs=[spec], n_samples=1, use_cot=False,
     )
 
     import csv as _csv
@@ -184,21 +181,15 @@ def test_run_benchmark_passes_no_cot_system_prompt_to_client(tmp_path: Path):
     save_problem(p, problems_dir / f"{p.problem_id}.json")
     results_dir = tmp_path / "results"
 
-    client = MagicMock()
-    client.call.return_value = CallResult(
-        response_text='```json\n{"analog": "mek", "button_color": "blue"}\n```',
-        input_tokens=1,
-        output_tokens=1,
-        cache_read_input_tokens=0,
-        latency_ms=1,
+    client = _client_returning(
+        '```json\n{"analog": "mek", "button_color": "blue"}\n```'
     )
 
     run_benchmark(
         problems_dir=problems_dir,
         results_dir=results_dir,
-        models=["claude-haiku-4-5-20251001"],
+        model_specs=[_spec("claude-haiku-4-5-20251001", client)],
         n_samples=1,
-        client=client,
         use_cot=False,
     )
 
@@ -214,21 +205,15 @@ def test_run_benchmark_defaults_to_cot_system_prompt(tmp_path: Path):
     save_problem(p, problems_dir / f"{p.problem_id}.json")
     results_dir = tmp_path / "results"
 
-    client = MagicMock()
-    client.call.return_value = CallResult(
-        response_text='```json\n{"analog": "mek", "button_color": "blue"}\n```',
-        input_tokens=1,
-        output_tokens=1,
-        cache_read_input_tokens=0,
-        latency_ms=1,
+    client = _client_returning(
+        '```json\n{"analog": "mek", "button_color": "blue"}\n```'
     )
 
     run_benchmark(
         problems_dir=problems_dir,
         results_dir=results_dir,
-        models=["claude-haiku-4-5-20251001"],
+        model_specs=[_spec("claude-haiku-4-5-20251001", client)],
         n_samples=1,
-        client=client,
     )
 
     call_kwargs = client.call.call_args.kwargs
@@ -242,24 +227,82 @@ def test_run_benchmark_writes_summary_csv(tmp_path: Path):
     save_problem(p, problems_dir / f"{p.problem_id}.json")
     results_dir = tmp_path / "results"
 
-    client = MagicMock()
-    client.call.return_value = CallResult(
-        response_text='```json\n{"analog": "mek", "button_color": "blue"}\n```',
-        input_tokens=500,
-        output_tokens=200,
-        cache_read_input_tokens=0,
-        latency_ms=1234,
+    client = _client_returning(
+        '```json\n{"analog": "mek", "button_color": "blue"}\n```'
     )
 
     run_benchmark(
         problems_dir=problems_dir,
         results_dir=results_dir,
-        models=["claude-haiku-4-5-20251001"],
+        model_specs=[_spec("claude-haiku-4-5-20251001", client)],
         n_samples=2,
-        client=client,
     )
 
     summary = (results_dir / "summary.csv").read_text()
     header = summary.splitlines()[0]
     for col in ["model", "variant", "problem_id", "n_samples", "n_correct", "accuracy"]:
         assert col in header
+
+
+def test_run_benchmark_uses_api_model_name_for_call_and_display_name_for_record(tmp_path: Path):
+    p = _problem()
+    problems_dir = tmp_path / "problems"
+    problems_dir.mkdir()
+    save_problem(p, problems_dir / f"{p.problem_id}.json")
+    results_dir = tmp_path / "results"
+
+    client = _client_returning(
+        '```json\n{"analog": "mek", "button_color": "blue"}\n```'
+    )
+
+    run_benchmark(
+        problems_dir=problems_dir,
+        results_dir=results_dir,
+        model_specs=[_spec(
+            display_name="lmstudio:google/gemma-3n-e4b",
+            client=client,
+            api_model_name="google/gemma-3n-e4b",
+        )],
+        n_samples=1,
+    )
+
+    # The SDK was called with the bare api_model_name.
+    assert client.call.call_args.kwargs["model"] == "google/gemma-3n-e4b"
+    # The on-disk record + path use the prefixed display_name.
+    sample_path = (results_dir / "raw" / "cot" / "lmstudio:google/gemma-3n-e4b"
+                   / p.problem_id / "sample_0.json")
+    assert sample_path.exists()
+    rec = json.loads(sample_path.read_text())
+    assert rec["model"] == "lmstudio:google/gemma-3n-e4b"
+    summary = (results_dir / "summary.csv").read_text()
+    assert "lmstudio:google/gemma-3n-e4b" in summary
+
+
+def test_run_benchmark_uses_each_specs_own_client(tmp_path: Path):
+    p = _problem()
+    problems_dir = tmp_path / "problems"
+    problems_dir.mkdir()
+    save_problem(p, problems_dir / f"{p.problem_id}.json")
+    results_dir = tmp_path / "results"
+
+    client_a = _client_returning(
+        '```json\n{"analog": "mek", "button_color": "blue"}\n```'
+    )
+    client_b = _client_returning(
+        '```json\n{"analog": "mek", "button_color": "blue"}\n```'
+    )
+
+    run_benchmark(
+        problems_dir=problems_dir,
+        results_dir=results_dir,
+        model_specs=[
+            _spec("alpha", client_a),
+            _spec("beta", client_b),
+        ],
+        n_samples=1,
+    )
+
+    assert client_a.call.call_count == 1
+    assert client_b.call.call_count == 1
+    assert client_a.call.call_args.kwargs["model"] == "alpha"
+    assert client_b.call.call_args.kwargs["model"] == "beta"

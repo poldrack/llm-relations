@@ -9,7 +9,8 @@ from typing import Optional
 
 from llm_relations.parser import parse_answer, ParseError
 from llm_relations.problem import Problem, load_problem
-from llm_relations.runner.client import ClaudeClient, build_system_prompt
+from llm_relations.runner.client import build_system_prompt
+from llm_relations.runner.specs import ModelSpec
 from llm_relations.scorer import score_answer
 
 
@@ -34,15 +35,16 @@ class SampleRecord:
 
 
 def _run_one_sample(
-    client: ClaudeClient,
-    model: str,
+    spec: ModelSpec,
     sample: int,
     problem: Problem,
     system_prompt: str,
     prompt_variant: str,
 ) -> SampleRecord:
-    result = client.call(
-        model=model, user_prompt=problem.prompt_text, system_prompt=system_prompt
+    result = spec.client.call(
+        model=spec.api_model_name,
+        user_prompt=problem.prompt_text,
+        system_prompt=system_prompt,
     )
     try:
         parsed = parse_answer(result.response_text)
@@ -51,7 +53,7 @@ def _run_one_sample(
     score = score_answer(problem, parsed)
     return SampleRecord(
         problem_id=problem.problem_id,
-        model=model,
+        model=spec.display_name,
         sample=sample,
         variant=problem.variant,
         prompt_variant=prompt_variant,
@@ -149,8 +151,6 @@ def _read_existing_summary(csv_path: Path) -> list[dict]:
 def _write_summary(results_dir: Path, records: list[SampleRecord]) -> None:
     csv_path = results_dir / "summary.csv"
     new_rows = _aggregate(records)
-    # Preserve prior rows whose (prompt_variant, model, problem_id) key is
-    # not being overwritten by this run.
     preserved = [
         row for row in _read_existing_summary(csv_path)
         if (row.get("prompt_variant", ""), row["model"], row["problem_id"]) not in new_rows
@@ -169,20 +169,19 @@ def _write_summary(results_dir: Path, records: list[SampleRecord]) -> None:
 def run_benchmark(
     problems_dir: Path,
     results_dir: Path,
-    models: list[str],
+    model_specs: list[ModelSpec],
     n_samples: int,
-    client: ClaudeClient,
     use_cot: bool = True,
 ) -> None:
     problems = [load_problem(f) for f in sorted(problems_dir.glob("*.json"))]
     system_prompt = build_system_prompt(use_cot=use_cot)
     prompt_variant = "cot" if use_cot else "no_cot"
     records: list[SampleRecord] = []
-    for model in models:
+    for spec in model_specs:
         for problem in problems:
             for s in range(n_samples):
                 record = _run_one_sample(
-                    client, model, s, problem, system_prompt, prompt_variant
+                    spec, s, problem, system_prompt, prompt_variant
                 )
                 _write_sample(results_dir, record)
                 records.append(record)
