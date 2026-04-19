@@ -127,4 +127,4 @@ def test_client_constructs_anthropic_with_base_url_when_provided(mocker):
 def test_client_constructs_anthropic_without_base_url_when_omitted(mocker):
     fake_anthropic_cls = mocker.patch("llm_relations.runner.client.Anthropic")
     ClaudeClient(api_key="test-key")
-    fake_anthropic_cls.assert_called_once_with(api_key="test-key")
+    fake_anthropic_cls.assert_called_once_with(api_key="test-key", base_url=None)
