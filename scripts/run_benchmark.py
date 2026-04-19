@@ -6,8 +6,7 @@ import os
 from pathlib import Path
 
 from llm_relations.runner.benchmark import run_benchmark
-from llm_relations.runner.client import ClaudeClient
-from llm_relations.runner.specs import ModelSpec
+from llm_relations.runner.specs import build_model_specs
 
 
 DEFAULT_MODELS = [
@@ -21,21 +20,35 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--problems-dir", type=Path, default=Path("problems"))
     parser.add_argument("--results-dir", type=Path, default=Path("results"))
-    parser.add_argument("--models", nargs="+", default=DEFAULT_MODELS)
+    parser.add_argument(
+        "--models",
+        nargs="+",
+        default=DEFAULT_MODELS,
+        help=(
+            "Model identifiers. Bare names (e.g. 'claude-opus-4-7') hit the "
+            "Anthropic API. Entries prefixed with 'lmstudio:' (e.g. "
+            "'lmstudio:google/gemma-3n-e4b') hit the LMStudio Anthropic-"
+            "compatible endpoint."
+        ),
+    )
     parser.add_argument("--n-samples", type=int, default=5)
     parser.add_argument(
         "--no-cot",
         action="store_true",
         help="Omit the 'think step by step' instruction from the system prompt.",
     )
+    parser.add_argument(
+        "--lmstudio-url",
+        default="http://127.0.0.1:1234",
+        help="Base URL for LMStudio's Anthropic-compatible /v1/messages endpoint.",
+    )
     args = parser.parse_args()
 
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
-    if not api_key:
-        raise SystemExit("ANTHROPIC_API_KEY is not set")
-
-    client = ClaudeClient(api_key=api_key)
-    specs = [ModelSpec(display_name=m, api_model_name=m, client=client) for m in args.models]
+    specs = build_model_specs(
+        args.models,
+        anthropic_api_key=os.environ.get("ANTHROPIC_API_KEY"),
+        lmstudio_url=args.lmstudio_url,
+    )
 
     run_benchmark(
         problems_dir=args.problems_dir,
