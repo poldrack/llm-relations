@@ -1,0 +1,39 @@
+{
+  "correct_answer": {
+    "analog": "AMBIGUOUS",
+    "button_color": "AMBIGUOUS"
+  },
+  "metadata": {
+    "activation_position": "bottom",
+    "correct_slot_index": 1,
+    "feature_distractor_slot": 0,
+    "feature_match_answer": {
+      "analog": "clop",
+      "button_color": "cyan"
+    },
+    "feature_twin_role": 2,
+    "filler_role": 1,
+    "memory_slot_order": [
+      0,
+      1
+    ],
+    "memory_target_name": "snig",
+    "n_objects": 3,
+    "perception_slot_order": [
+      0,
+      1
+    ],
+    "positional_match_answer": {
+      "analog": "clop",
+      "button_color": "cyan"
+    },
+    "seed": 6005,
+    "slot_orders_aligned": true,
+    "structural_correct_analog": "hint",
+    "structural_correct_button_color": "purple",
+    "target_role": 0
+  },
+  "problem_id": "control_04",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a snig has a property: it can be activated by pressing the button at a specific position on it. Your job is to figure out which object in the perception scenario is the snig-analog, and therefore which button on it activates it.\n\nMemory scenario: There are three objects on a table: a snig, a grup, and a trob. The snig is underneath the grup. The grup is to-the-left-of the trob. The snig has a pink button on top, a yellow button on side, and a cyan button on bottom. The grup has a black button on top, a purple button on side, and a brown button on bottom. The trob has a green button on top, a red button on side, and a blue button on bottom. Pressing the button on the bottom of the snig activates it.\n\nPerception scenario: There are three objects on a shelf: a clop, a hint, and a yib. The clop has a pink button on top, a yellow button on side, and a cyan button on bottom. The hint has a brown button on top, a black button on side, and a purple button on bottom. The yib has a green button on top, a blue button on side, and a red button on bottom.\n\nWhich object in the perception scenario is the snig-analog, and which button activates it? Answer as a fenced JSON block with keys `analog` (the perception object's name) and `button_color` (the color of the activating button on that object).",
+  "variant": "control"
+}

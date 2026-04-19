@@ -1,0 +1,39 @@
+{
+  "correct_answer": {
+    "analog": "AMBIGUOUS",
+    "button_color": "AMBIGUOUS"
+  },
+  "metadata": {
+    "activation_position": "top",
+    "correct_slot_index": 2,
+    "feature_distractor_slot": 1,
+    "feature_match_answer": {
+      "analog": "corp",
+      "button_color": "orange"
+    },
+    "feature_twin_role": 0,
+    "filler_role": 2,
+    "memory_slot_order": [
+      0,
+      1
+    ],
+    "memory_target_name": "yib",
+    "n_objects": 3,
+    "perception_slot_order": [
+      0,
+      1
+    ],
+    "positional_match_answer": {
+      "analog": "clop",
+      "button_color": "red"
+    },
+    "seed": 6004,
+    "slot_orders_aligned": true,
+    "structural_correct_analog": "wren",
+    "structural_correct_button_color": "black",
+    "target_role": 1
+  },
+  "problem_id": "control_03",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a yib has a property: it can be activated by pressing the button at a specific position on it. Your job is to figure out which object in the perception scenario is the yib-analog, and therefore which button on it activates it.\n\nMemory scenario: There are three objects on a table: a fip, a yib, and a plon. The fip is underneath the yib. The yib is to-the-left-of the plon. The fip has a cyan button on top, a black button on side, and a blue button on bottom. The yib has a orange button on top, a purple button on side, and a pink button on bottom. The plon has a green button on top, a yellow button on side, and a red button on bottom. Pressing the button on the top of the yib activates it.\n\nPerception scenario: There are three objects on a shelf: a clop, a corp, and a wren. The clop has a red button on top, a yellow button on side, and a green button on bottom. The corp has a orange button on top, a purple button on side, and a pink button on bottom. The wren has a black button on top, a cyan button on side, and a blue button on bottom.\n\nWhich object in the perception scenario is the yib-analog, and which button activates it? Answer as a fenced JSON block with keys `analog` (the perception object's name) and `button_color` (the color of the activating button on that object).",
+  "variant": "control"
+}

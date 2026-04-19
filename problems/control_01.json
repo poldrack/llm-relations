@@ -1,0 +1,39 @@
+{
+  "correct_answer": {
+    "analog": "AMBIGUOUS",
+    "button_color": "AMBIGUOUS"
+  },
+  "metadata": {
+    "activation_position": "side",
+    "correct_slot_index": 2,
+    "feature_distractor_slot": 0,
+    "feature_match_answer": {
+      "analog": "hask",
+      "button_color": "blue"
+    },
+    "feature_twin_role": 0,
+    "filler_role": 1,
+    "memory_slot_order": [
+      0,
+      1
+    ],
+    "memory_target_name": "blix",
+    "n_objects": 3,
+    "perception_slot_order": [
+      0,
+      1
+    ],
+    "positional_match_answer": {
+      "analog": "hask",
+      "button_color": "blue"
+    },
+    "seed": 6002,
+    "slot_orders_aligned": true,
+    "structural_correct_analog": "quan",
+    "structural_correct_button_color": "cyan",
+    "target_role": 2
+  },
+  "problem_id": "control_01",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a blix has a property: it can be activated by pressing the button at a specific position on it. Your job is to figure out which object in the perception scenario is the blix-analog, and therefore which button on it activates it.\n\nMemory scenario: There are three objects on a table: a arn, a vorp, and a blix. The arn is underneath the vorp. The vorp is to-the-left-of the blix. The arn has a pink button on top, a brown button on side, and a yellow button on bottom. The vorp has a cyan button on top, a black button on side, and a green button on bottom. The blix has a orange button on top, a blue button on side, and a purple button on bottom. Pressing the button on the side of the blix activates it.\n\nPerception scenario: There are three objects on a shelf: a hask, a scob, and a quan. The hask has a orange button on top, a blue button on side, and a purple button on bottom. The scob has a pink button on top, a brown button on side, and a yellow button on bottom. The quan has a green button on top, a cyan button on side, and a black button on bottom.\n\nWhich object in the perception scenario is the blix-analog, and which button activates it? Answer as a fenced JSON block with keys `analog` (the perception object's name) and `button_color` (the color of the activating button on that object).",
+  "variant": "control"
+}

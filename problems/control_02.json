@@ -1,0 +1,39 @@
+{
+  "correct_answer": {
+    "analog": "AMBIGUOUS",
+    "button_color": "AMBIGUOUS"
+  },
+  "metadata": {
+    "activation_position": "top",
+    "correct_slot_index": 1,
+    "feature_distractor_slot": 2,
+    "feature_match_answer": {
+      "analog": "twix",
+      "button_color": "pink"
+    },
+    "feature_twin_role": 2,
+    "filler_role": 0,
+    "memory_slot_order": [
+      0,
+      1
+    ],
+    "memory_target_name": "vask",
+    "n_objects": 3,
+    "perception_slot_order": [
+      0,
+      1
+    ],
+    "positional_match_answer": {
+      "analog": "scob",
+      "button_color": "black"
+    },
+    "seed": 6003,
+    "slot_orders_aligned": true,
+    "structural_correct_analog": "oxim",
+    "structural_correct_button_color": "blue",
+    "target_role": 1
+  },
+  "problem_id": "control_02",
+  "prompt_text": "I'm going to describe two scenarios. In the memory scenario, a novel object called a vask has a property: it can be activated by pressing the button at a specific position on it. Your job is to figure out which object in the perception scenario is the vask-analog, and therefore which button on it activates it.\n\nMemory scenario: There are three objects on a table: a jax, a vask, and a klon. The jax is underneath the vask. The vask is to-the-left-of the klon. The jax has a blue button on top, a brown button on side, and a cyan button on bottom. The vask has a pink button on top, a orange button on side, and a yellow button on bottom. The klon has a purple button on top, a red button on side, and a black button on bottom. Pressing the button on the top of the vask activates it.\n\nPerception scenario: There are three objects on a shelf: a scob, a oxim, and a twix. The scob has a black button on top, a purple button on side, and a red button on bottom. The oxim has a blue button on top, a cyan button on side, and a brown button on bottom. The twix has a pink button on top, a orange button on side, and a yellow button on bottom.\n\nWhich object in the perception scenario is the vask-analog, and which button activates it? Answer as a fenced JSON block with keys `analog` (the perception object's name) and `button_color` (the color of the activating button on that object).",
+  "variant": "control"
+}
