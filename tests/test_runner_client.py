@@ -114,3 +114,17 @@ def test_client_retries_then_fails_after_max_attempts(mocker):
     with pytest.raises(APIStatusError):
         client.call(model="claude-haiku-4-5-20251001", user_prompt="Solve.")
     assert fake_anthropic.messages.create.call_count == 3
+
+
+def test_client_constructs_anthropic_with_base_url_when_provided(mocker):
+    fake_anthropic_cls = mocker.patch("llm_relations.runner.client.Anthropic")
+    ClaudeClient(api_key="test-key", base_url="http://127.0.0.1:1234")
+    fake_anthropic_cls.assert_called_once_with(
+        api_key="test-key", base_url="http://127.0.0.1:1234"
+    )
+
+
+def test_client_constructs_anthropic_without_base_url_when_omitted(mocker):
+    fake_anthropic_cls = mocker.patch("llm_relations.runner.client.Anthropic")
+    ClaudeClient(api_key="test-key")
+    fake_anthropic_cls.assert_called_once_with(api_key="test-key")

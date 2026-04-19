@@ -52,8 +52,17 @@ def _sleep(seconds: float) -> None:
 
 
 class ClaudeClient:
-    def __init__(self, api_key: str, max_retries: int = 5, base_delay: float = 2.0):
-        self._client = Anthropic(api_key=api_key)
+    def __init__(
+        self,
+        api_key: str,
+        max_retries: int = 5,
+        base_delay: float = 2.0,
+        base_url: str | None = None,
+    ):
+        if base_url is None:
+            self._client = Anthropic(api_key=api_key)
+        else:
+            self._client = Anthropic(api_key=api_key, base_url=base_url)
         self._max_retries = max_retries
         self._base_delay = base_delay
 
