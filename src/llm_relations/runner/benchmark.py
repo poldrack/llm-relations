@@ -72,7 +72,11 @@ def _run_one_sample(
 
 
 def _write_sample(results_dir: Path, record: SampleRecord) -> None:
-    out_dir = results_dir / "raw" / record.prompt_variant / record.model / record.problem_id
+    # Sanitize for filesystem use only — the JSON record and summary CSV keep
+    # the unsanitized display_name. Slashes in model names (e.g.
+    # 'lmstudio:google/gemma-3n-e4b') would otherwise create nested dirs.
+    safe_model = record.model.replace("/", "_")
+    out_dir = results_dir / "raw" / record.prompt_variant / safe_model / record.problem_id
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / f"sample_{record.sample}.json").write_text(
         json.dumps(asdict(record), indent=2, sort_keys=True)
@@ -151,6 +155,9 @@ def _read_existing_summary(csv_path: Path) -> list[dict]:
 def _write_summary(results_dir: Path, records: list[SampleRecord]) -> None:
     csv_path = results_dir / "summary.csv"
     new_rows = _aggregate(records)
+    # Keep prior rows whose (prompt_variant, model, problem_id) key is not
+    # being overwritten by this run, so re-running with new prompt variants
+    # accumulates rather than clobbers.
     preserved = [
         row for row in _read_existing_summary(csv_path)
         if (row.get("prompt_variant", ""), row["model"], row["problem_id"]) not in new_rows

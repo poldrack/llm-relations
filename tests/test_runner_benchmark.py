@@ -268,8 +268,8 @@ def test_run_benchmark_uses_api_model_name_for_call_and_display_name_for_record(
 
     # The SDK was called with the bare api_model_name.
     assert client.call.call_args.kwargs["model"] == "google/gemma-3n-e4b"
-    # The on-disk record + path use the prefixed display_name.
-    sample_path = (results_dir / "raw" / "cot" / "lmstudio:google/gemma-3n-e4b"
+    # The on-disk record + path use the prefixed display_name (slash sanitized for path).
+    sample_path = (results_dir / "raw" / "cot" / "lmstudio:google_gemma-3n-e4b"
                    / p.problem_id / "sample_0.json")
     assert sample_path.exists()
     rec = json.loads(sample_path.read_text())
@@ -306,3 +306,39 @@ def test_run_benchmark_uses_each_specs_own_client(tmp_path: Path):
     assert client_b.call.call_count == 1
     assert client_a.call.call_args.kwargs["model"] == "alpha"
     assert client_b.call.call_args.kwargs["model"] == "beta"
+
+
+def test_run_benchmark_sanitizes_slashes_in_display_name_for_on_disk_path(tmp_path: Path):
+    """display_name like 'lmstudio:google/gemma-3n-e4b' must not create nested dirs."""
+    p = _problem()
+    problems_dir = tmp_path / "problems"
+    problems_dir.mkdir()
+    save_problem(p, problems_dir / f"{p.problem_id}.json")
+    results_dir = tmp_path / "results"
+
+    client = _client_returning(
+        '```json\n{"analog": "mek", "button_color": "blue"}\n```'
+    )
+
+    run_benchmark(
+        problems_dir=problems_dir,
+        results_dir=results_dir,
+        model_specs=[_spec(
+            display_name="lmstudio:google/gemma-3n-e4b",
+            client=client,
+            api_model_name="google/gemma-3n-e4b",
+        )],
+        n_samples=1,
+    )
+
+    # The model directory must be a single, flat segment with the slash replaced.
+    model_dir = results_dir / "raw" / "cot" / "lmstudio:google_gemma-3n-e4b"
+    assert model_dir.is_dir(), f"expected flat model dir, got: {list((results_dir / 'raw' / 'cot').iterdir())}"
+    # No nested 'gemma-3n-e4b' directory under a 'lmstudio:google' parent.
+    assert not (results_dir / "raw" / "cot" / "lmstudio:google").exists()
+    # The JSON record still carries the unsanitized display_name.
+    rec = json.loads((model_dir / p.problem_id / "sample_0.json").read_text())
+    assert rec["model"] == "lmstudio:google/gemma-3n-e4b"
+    # The summary CSV also carries the unsanitized name.
+    summary = (results_dir / "summary.csv").read_text()
+    assert "lmstudio:google/gemma-3n-e4b" in summary
