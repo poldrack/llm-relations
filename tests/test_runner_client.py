@@ -2,7 +2,12 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from llm_relations.runner.client import ClaudeClient, SYSTEM_PROMPT, CallResult
+from llm_relations.runner.client import (
+    ClaudeClient,
+    CallResult,
+    SYSTEM_PROMPT,
+    build_system_prompt,
+)
 
 
 def _mock_message(text: str, input_tokens: int = 100, output_tokens: int = 200) -> MagicMock:
@@ -36,6 +41,42 @@ def test_client_calls_messages_create_with_expected_arguments(mocker):
     assert call_kwargs["system"][0]["text"] == SYSTEM_PROMPT
     assert call_kwargs["system"][0]["cache_control"] == {"type": "ephemeral"}
     assert call_kwargs["messages"] == [{"role": "user", "content": "Solve this."}]
+
+
+def test_build_system_prompt_with_cot_includes_think_step_by_step():
+    prompt = build_system_prompt(use_cot=True)
+    assert "Think step by step" in prompt
+    # Still includes the JSON format instruction.
+    assert "```json" in prompt
+
+
+def test_build_system_prompt_without_cot_omits_think_step_by_step():
+    prompt = build_system_prompt(use_cot=False)
+    assert "Think step by step" not in prompt
+    assert "step by step" not in prompt.lower()
+    # Still includes the JSON format instruction.
+    assert "```json" in prompt
+
+
+def test_default_system_prompt_matches_cot_variant():
+    assert SYSTEM_PROMPT == build_system_prompt(use_cot=True)
+
+
+def test_client_call_uses_provided_system_prompt(mocker):
+    fake_anthropic = MagicMock()
+    fake_anthropic.messages.create.return_value = _mock_message("hi")
+    mocker.patch("llm_relations.runner.client.Anthropic", return_value=fake_anthropic)
+
+    custom_prompt = "CUSTOM SYSTEM PROMPT"
+    client = ClaudeClient(api_key="test-key")
+    client.call(
+        model="claude-haiku-4-5-20251001",
+        user_prompt="Solve.",
+        system_prompt=custom_prompt,
+    )
+
+    call_kwargs = fake_anthropic.messages.create.call_args.kwargs
+    assert call_kwargs["system"][0]["text"] == custom_prompt
 
 
 def test_client_retries_on_rate_limit(mocker):
