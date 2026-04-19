@@ -30,5 +30,5 @@ packages = ["src/llm_relations"]
 testpaths = ["tests"]
 addopts = "-ra --strict-markers"
 markers = [
-    "smoke: hits the real Anthropic API (opt-in)",
+    "smoke: hits a real external API (Anthropic or LMStudio); opt-in",
 ]

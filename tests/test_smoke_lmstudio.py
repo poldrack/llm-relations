@@ -10,6 +10,7 @@ LMStudio at the configured URL. Configure with environment variables:
 import os
 
 import pytest
+from anthropic import APIConnectionError
 
 from llm_relations.runner.client import ClaudeClient
 
@@ -30,7 +31,7 @@ def test_real_lmstudio_call_returns_response():
             user_prompt="Say the single word: hello",
             max_tokens=32,
         )
-    except Exception as e:
+    except APIConnectionError as e:
         pytest.skip(f"LMStudio not reachable at {base_url} ({type(e).__name__}: {e})")
 
     assert result.output_tokens > 0
