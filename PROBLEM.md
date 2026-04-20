@@ -1,5 +1,9 @@
 # On Hummel & Heaton's Argument About LLMs and Symbolic Thought
 
+This is a response from Claude Opus 4.7 based on the following prompt:
+
+> The author of the attached paper claims that there is a set of tasks taht LLMs cannot perform because they do not contain the basic elements for symbolic thought: dynamic binding, multiplace predicates, and structure mapping.  Please review the paper and tell me whether you think this is a reasonable argument.
+
 This is a thoughtful paper, and the authors are making a more careful argument than a quick read might suggest. Let me separate what I think is right, what I think is questionable, and what remains genuinely open.
 
 ## What the paper actually claims
@@ -32,6 +36,7 @@ The argument overreaches when it suggests LLMs categorically cannot perform task
 
 So: a reasonable argument about biological cognition with a somewhat overstated extension to LLMs. The core theoretical contribution — isolating multiplace predicates and structure mapping as independent, both-necessary capacities — is valuable regardless of how the LLM debate shakes out.
 
+> can you develop a novel version of their task that I could test out on an LLM but that they could not legitimately claim would be in the models' training diet?
 
 # Designing a Novel Test
 
