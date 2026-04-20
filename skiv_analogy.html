@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Skiv / Snig / Trob — Structural Mapping</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #fafafa;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1b1b1b;
+  }
+  main { max-width: 1200px; margin: 0 auto; padding: 32px 24px 48px; }
+  h1 { margin: 0 0 6px; font-size: 22px; font-weight: 600; }
+  h2 { margin: 28px 0 8px; font-size: 16px; font-weight: 600; }
+  p { line-height: 1.55; font-size: 14px; margin: 6px 0; }
+  .sub { color: #555; font-size: 13px; margin-bottom: 18px; }
+  .legend { display: flex; gap: 16px; font-size: 12px; color: #333; align-items: center; flex-wrap: wrap; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; }
+  .chip .sw { width: 12px; height: 12px; border-radius: 50%; border: 1px solid #333; }
+  .panel {
+    border: 1px solid #e2e2e2;
+    border-radius: 8px;
+    background: #fff;
+    padding: 14px 16px;
+    margin-top: 14px;
+  }
+  code { background: #f2f2f2; padding: 1px 5px; border-radius: 3px; }
+  .answer {
+    background: #eef7ee;
+    border-left: 4px solid #2f8f3a;
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin-top: 16px;
+  }
+  .lure {
+    background: #fdf3ee;
+    border-left: 4px solid #c0642a;
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin-top: 10px;
+  }
+  svg { display: block; }
+  .mono { font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; }
+</style>
+</head>
+<body>
+<main>
+
+<h1>Skiv / Snig / Trob — graphical structure mapping</h1>
+<p class="sub">Memory scenario (employees) on the left, Perception scenario (plants) on the right.
+Each object shows its three positional features (top / side / bottom). Edges are labeled with the
+relation predicate. Dashed arrows show the analogical mapping between the two graphs.</p>
+
+<h2>1. Memory scenario — organization chart</h2>
+
+<svg width="1100" height="260" viewBox="0 0 1100 260" role="img" aria-label="Memory scenario graph">
+  <!-- styles -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#444"/>
+    </marker>
+  </defs>
+
+  <!-- skiv -->
+  <g transform="translate(120,40)">
+    <rect width="160" height="170" rx="10" ry="10" fill="#fff" stroke="#2f8f3a" stroke-width="2.5"/>
+    <text x="80" y="24" text-anchor="middle" font-size="16" font-weight="700" fill="#2f8f3a">skiv</text>
+    <text x="80" y="40" text-anchor="middle" font-size="11" fill="#666">role 0 — target</text>
+
+    <circle cx="40" cy="72" r="12" fill="yellow" stroke="#222"/>
+    <text x="60" y="76" font-size="12">top: yellow</text>
+
+    <circle cx="40" cy="102" r="12" fill="cyan" stroke="#222"/>
+    <text x="60" y="106" font-size="12">side: cyan</text>
+
+    <circle cx="40" cy="134" r="14" fill="saddlebrown" stroke="#2f8f3a" stroke-width="3"/>
+    <text x="60" y="138" font-size="12" font-weight="700">bottom: brown  ⬅ activates</text>
+  </g>
+
+  <!-- tunk -->
+  <g transform="translate(470,40)">
+    <rect width="160" height="170" rx="10" ry="10" fill="#fff" stroke="#999" stroke-width="1.5"/>
+    <text x="80" y="24" text-anchor="middle" font-size="16" font-weight="700">tunk</text>
+    <text x="80" y="40" text-anchor="middle" font-size="11" fill="#666">role 1 — hub</text>
+
+    <circle cx="40" cy="72" r="12" fill="orange" stroke="#222"/>
+    <text x="60" y="76" font-size="12">top: orange</text>
+
+    <circle cx="40" cy="102" r="12" fill="red" stroke="#222"/>
+    <text x="60" y="106" font-size="12">side: red</text>
+
+    <circle cx="40" cy="132" r="12" fill="black" stroke="#222"/>
+    <text x="60" y="136" font-size="12">bottom: black</text>
+  </g>
+
+  <!-- drog -->
+  <g transform="translate(820,40)">
+    <rect width="160" height="170" rx="10" ry="10" fill="#fff" stroke="#999" stroke-width="1.5"/>
+    <text x="80" y="24" text-anchor="middle" font-size="16" font-weight="700">drog</text>
+    <text x="80" y="40" text-anchor="middle" font-size="11" fill="#666">role 2 — filler</text>
+
+    <circle cx="40" cy="72" r="12" fill="green" stroke="#222"/>
+    <text x="60" y="76" font-size="12">top: green</text>
+
+    <circle cx="40" cy="102" r="12" fill="purple" stroke="#222"/>
+    <text x="60" y="106" font-size="12">side: purple</text>
+
+    <circle cx="40" cy="132" r="12" fill="pink" stroke="#222"/>
+    <text x="60" y="136" font-size="12">bottom: pink</text>
+  </g>
+
+  <!-- edges -->
+  <!-- skiv -> tunk (reports-to) -->
+  <line x1="280" y1="125" x2="470" y2="125" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="375" y="115" text-anchor="middle" font-size="12" fill="#333">reports-to (slot 0, vertical)</text>
+  <text x="375" y="145" text-anchor="middle" font-size="10" fill="#666">connects role 0 → role 1</text>
+
+  <!-- tunk — drog (beside) -->
+  <line x1="630" y1="125" x2="820" y2="125" stroke="#444" stroke-width="2"/>
+  <text x="725" y="115" text-anchor="middle" font-size="12" fill="#333">sits-beside (slot 1, lateral)</text>
+  <text x="725" y="145" text-anchor="middle" font-size="10" fill="#666">connects role 1 — role 2</text>
+</svg>
+
+<p><b>Relations:</b>
+(1) <code>reports-to(skiv, tunk)</code> &nbsp;•&nbsp;
+(2) <code>sits-beside(tunk, drog)</code>.
+<b>Activation rule:</b> the <b>bottom</b> specialty of skiv (brown) activates it.</p>
+
+
+<h2>2. Perception scenario — garden</h2>
+
+<svg width="1100" height="260" viewBox="0 0 1100 260" role="img" aria-label="Perception scenario graph">
+  <defs>
+    <marker id="arrow2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#444"/>
+    </marker>
+  </defs>
+
+  <!-- trob (role 0) -->
+  <g transform="translate(120,40)">
+    <rect width="160" height="170" rx="10" ry="10" fill="#fff" stroke="#2f8f3a" stroke-width="2.5"/>
+    <text x="80" y="24" text-anchor="middle" font-size="16" font-weight="700" fill="#2f8f3a">trob</text>
+    <text x="80" y="40" text-anchor="middle" font-size="11" fill="#666">role 0 — skiv-analog</text>
+
+    <circle cx="40" cy="72" r="12" fill="green" stroke="#222"/>
+    <text x="60" y="76" font-size="12">top: green</text>
+
+    <circle cx="40" cy="102" r="12" fill="pink" stroke="#222"/>
+    <text x="60" y="106" font-size="12">side: pink</text>
+
+    <circle cx="40" cy="134" r="14" fill="purple" stroke="#2f8f3a" stroke-width="3"/>
+    <text x="60" y="138" font-size="12" font-weight="700">bottom: purple  ⬅ activates</text>
+  </g>
+
+  <!-- snig (role 1) -->
+  <g transform="translate(470,40)">
+    <rect width="160" height="170" rx="10" ry="10" fill="#fff" stroke="#999" stroke-width="1.5"/>
+    <text x="80" y="24" text-anchor="middle" font-size="16" font-weight="700">snig</text>
+    <text x="80" y="40" text-anchor="middle" font-size="11" fill="#666">role 1 — hub (tunk-analog)</text>
+
+    <circle cx="40" cy="72" r="12" fill="yellow" stroke="#222"/>
+    <text x="60" y="76" font-size="12">top: yellow</text>
+
+    <circle cx="40" cy="102" r="12" fill="cyan" stroke="#222"/>
+    <text x="60" y="106" font-size="12">side: cyan</text>
+
+    <circle cx="40" cy="132" r="12" fill="saddlebrown" stroke="#222"/>
+    <text x="60" y="136" font-size="12">bottom: brown  ← feature-lure</text>
+  </g>
+
+  <!-- clop (role 2) -->
+  <g transform="translate(820,40)">
+    <rect width="160" height="170" rx="10" ry="10" fill="#fff" stroke="#999" stroke-width="1.5"/>
+    <text x="80" y="24" text-anchor="middle" font-size="16" font-weight="700">clop</text>
+    <text x="80" y="40" text-anchor="middle" font-size="11" fill="#666">role 2 — drog-analog</text>
+
+    <circle cx="40" cy="72" r="12" fill="orange" stroke="#222"/>
+    <text x="60" y="76" font-size="12">top: orange</text>
+
+    <circle cx="40" cy="102" r="12" fill="red" stroke="#222"/>
+    <text x="60" y="106" font-size="12">side: red</text>
+
+    <circle cx="40" cy="132" r="12" fill="black" stroke="#222"/>
+    <text x="60" y="136" font-size="12">bottom: black</text>
+  </g>
+
+  <!-- trob — snig (beside)  -->
+  <line x1="280" y1="125" x2="470" y2="125" stroke="#444" stroke-width="2"/>
+  <text x="375" y="115" text-anchor="middle" font-size="12" fill="#333">grows-beside (slot 0, lateral)</text>
+  <text x="375" y="145" text-anchor="middle" font-size="10" fill="#666">connects role 0 — role 1</text>
+
+  <!-- snig -> clop (is-growing-under) -->
+  <line x1="630" y1="125" x2="820" y2="125" stroke="#444" stroke-width="2" marker-end="url(#arrow2)"/>
+  <text x="725" y="115" text-anchor="middle" font-size="12" fill="#333">is-growing-under (slot 1, vertical)</text>
+  <text x="725" y="145" text-anchor="middle" font-size="10" fill="#666">connects role 1 → role 2</text>
+</svg>
+
+<p><b>Relations:</b>
+(1) <code>grows-beside(trob, snig)</code> &nbsp;•&nbsp;
+(2) <code>is-growing-under(snig, clop)</code>.
+Notice the <em>order of predicate types</em> is flipped from memory: the lateral relation appears in slot&nbsp;0 and the vertical relation in slot&nbsp;1.</p>
+
+
+<h2>3. The mapping — two competing alignments</h2>
+
+<svg width="1100" height="360" viewBox="0 0 1100 360" role="img" aria-label="Mapping between memory and perception">
+  <!-- memory nodes -->
+  <g font-size="13" font-weight="700">
+    <rect x="60"  y="40"  width="110" height="42" rx="8" fill="#fff" stroke="#2f8f3a" stroke-width="2"/>
+    <text x="115" y="58" text-anchor="middle">skiv</text>
+    <text x="115" y="74" text-anchor="middle" font-size="10" font-weight="400" fill="#666">role 0 / target</text>
+
+    <rect x="60"  y="140" width="110" height="42" rx="8" fill="#fff" stroke="#999"/>
+    <text x="115" y="158" text-anchor="middle">tunk</text>
+    <text x="115" y="174" text-anchor="middle" font-size="10" font-weight="400" fill="#666">role 1 / hub</text>
+
+    <rect x="60"  y="240" width="110" height="42" rx="8" fill="#fff" stroke="#999"/>
+    <text x="115" y="258" text-anchor="middle">drog</text>
+    <text x="115" y="274" text-anchor="middle" font-size="10" font-weight="400" fill="#666">role 2 / filler</text>
+  </g>
+
+  <!-- perception nodes -->
+  <g font-size="13" font-weight="700">
+    <rect x="920" y="40"  width="110" height="42" rx="8" fill="#fff" stroke="#2f8f3a" stroke-width="2"/>
+    <text x="975" y="58" text-anchor="middle">trob</text>
+    <text x="975" y="74" text-anchor="middle" font-size="10" font-weight="400" fill="#666">role 0</text>
+
+    <rect x="920" y="140" width="110" height="42" rx="8" fill="#fff" stroke="#999"/>
+    <text x="975" y="158" text-anchor="middle">snig</text>
+    <text x="975" y="174" text-anchor="middle" font-size="10" font-weight="400" fill="#666">role 1 / hub</text>
+
+    <rect x="920" y="240" width="110" height="42" rx="8" fill="#fff" stroke="#999"/>
+    <text x="975" y="258" text-anchor="middle">clop</text>
+    <text x="975" y="274" text-anchor="middle" font-size="10" font-weight="400" fill="#666">role 2</text>
+  </g>
+
+  <!-- column labels -->
+  <text x="115" y="24" text-anchor="middle" font-size="12" fill="#333">Memory</text>
+  <text x="975" y="24" text-anchor="middle" font-size="12" fill="#333">Perception</text>
+
+  <!-- structural (correct) mapping - green -->
+  <g stroke="#2f8f3a" stroke-width="2.5" fill="none">
+    <line x1="172" y1="61" x2="918" y2="61"/>
+    <line x1="172" y1="161" x2="918" y2="161"/>
+    <line x1="172" y1="261" x2="918" y2="261"/>
+  </g>
+  <g fill="#2f8f3a" font-size="11" font-weight="700">
+    <text x="545" y="54" text-anchor="middle">✓ STRUCTURAL MAPPING — by template slot position</text>
+    <text x="545" y="154" text-anchor="middle">tunk ↔ snig  (both role 1, sit in both relations)</text>
+    <text x="545" y="254" text-anchor="middle">drog ↔ clop  (both role 2)</text>
+  </g>
+
+  <!-- feature/semantic (incorrect) mapping - orange dashed -->
+  <g stroke="#c0642a" stroke-width="2" fill="none" stroke-dasharray="6 5">
+    <!-- skiv <-> snig  (feature colors match, hierarchy direction matches) -->
+    <path d="M 172 66  C 400 66, 600 166, 918 166"/>
+    <!-- tunk <-> clop -->
+    <path d="M 172 166 C 420 166, 600 266, 918 266"/>
+    <!-- drog <-> trob -->
+    <path d="M 172 266 C 400 266, 600 66,  918 66"/>
+  </g>
+  <g fill="#c0642a" font-size="11">
+    <text x="545" y="325" text-anchor="middle">
+      ✗ FEATURE / SEMANTIC MAPPING — skiv↔snig, tunk↔clop, drog↔trob
+    </text>
+    <text x="545" y="340" text-anchor="middle">
+      Matches colors &amp; pairs “reports-to” with “is-growing-under” — but this is the lure.
+    </text>
+  </g>
+</svg>
+
+<div class="legend" style="margin-top:8px">
+  <span class="chip"><span class="sw" style="background:#2f8f3a"></span>Correct — structural (template-slot) mapping</span>
+  <span class="chip"><span class="sw" style="background:#c0642a"></span>Incorrect — feature / semantic-predicate mapping</span>
+</div>
+
+
+<h2>4. Why the structural mapping wins</h2>
+
+<div class="panel">
+<p>The relation-sentence template is fixed:</p>
+<p class="mono">  sentence 1 → connects role 0 – role 1<br/>
+  sentence 2 → connects role 1 – role 2</p>
+<p>So <b>role identity is set by template position</b>, not by which predicate (vertical vs. lateral)
+is used. In this problem the two sides deliberately use a <i>different</i> slot ordering of the
+vertical and lateral predicates:</p>
+
+<p class="mono">
+Memory  slot 0 = reports-to (vertical) &nbsp;|&nbsp; slot 1 = sits-beside (lateral)<br/>
+Percept slot 0 = grows-beside (lateral) &nbsp;|&nbsp; slot 1 = is-growing-under (vertical)
+</p>
+
+<p>Reading off the role assignments from sentence position:</p>
+<p class="mono">
+Memory:     role 0 = skiv,   role 1 = tunk,  role 2 = drog<br/>
+Perception: role 0 = trob,   role 1 = snig,  role 2 = clop
+</p>
+
+<p>Therefore the structural analog of <b>skiv</b> (role 0) is <b>trob</b> (role 0).
+Its activating leaf is the one at the <b>bottom</b> position — <b>purple</b>.</p>
+</div>
+
+<div class="answer">
+<b>Answer (structural mapping):</b> The skiv-analog is <b>trob</b>, and its <b>purple</b> leaf
+(bottom position) activates it.
+</div>
+
+<div class="lure">
+<b>Lure (feature / semantic mapping):</b> A reasoner that aligns predicates by meaning
+(“reports-to” ≈ “is-growing-under”) or aligns objects by shared feature colors would pick
+<b>snig</b> with its <b>brown</b> bottom leaf — because snig has skiv’s exact colour set
+(yellow-top, cyan-side, brown-bottom) and is the <i>subordinate</i> end of the vertical relation.
+This is the tempting but incorrect answer.
+</div>
+
+</main>
+</body>
+</html>
